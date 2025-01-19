@@ -5,8 +5,6 @@ import type { UIFieldClientProps } from 'payload'
 import { useDocumentInfo, useFormFields } from '@payloadcms/ui'
 import { useMemo } from 'react'
 
-import { getClientSideURL } from '../utils/getUrl.js'
-
 type Props = {
   custom: {
     serverURL: string

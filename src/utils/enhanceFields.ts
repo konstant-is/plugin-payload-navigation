@@ -12,15 +12,25 @@ import {
 import { createFieldConfigs } from './createFieldConfigs.js'
 
 export const enhanceFields = ({
-  config,
   fields,
   locales,
+  pluginConfig,
 }: {
-  config: NavigationPluginConfig
   fields: Field[]
   locales: string[]
+  pluginConfig: NavigationPluginConfig
 }) => {
+  // Generate configurations
+  const {
+    localizedSlugFieldConfig,
+    localizedUrlFieldConfig,
+    permalinkFieldConfig,
+    slugFieldConfig,
+    urlFieldConfig,
+  } = createFieldConfigs(pluginConfig, locales)
+
   let updatedFields = [...fields] // Start with a copy of the existing fields
+  const usePermalink = pluginConfig.options?.usePermalink || true
 
   // Create index for fast lookups
   const indexedFields = fields.reduce(
@@ -46,13 +56,9 @@ export const enhanceFields = ({
     })
   }
 
-  // Generate configurations
-  const { localizedSlugFieldConfig, localizedUrlFieldConfig, slugFieldConfig, urlFieldConfig } =
-    createFieldConfigs(config, locales)
-
   // Add slug fields
   if (!indexedFields[slugFieldConfig.fieldName]) {
-    const slugFields = createSlugField({ config: slugFieldConfig })
+    const slugFields = createSlugField(pluginConfig, slugFieldConfig)
     addFields(slugFields) // Handles multiple slug-related fields
   }
 
@@ -64,8 +70,7 @@ export const enhanceFields = ({
 
   // Add URL fields
   if (!indexedFields[urlFieldConfig.fieldName]) {
-    const field = createUrlField(urlFieldConfig)
-
+    const field = createUrlField(pluginConfig, urlFieldConfig)
     addFields([field])
   }
 
@@ -75,11 +80,8 @@ export const enhanceFields = ({
     addFields([field])
   }
 
-  if (config.options?.usePermalink && !indexedFields['permalink']) {
-    const field = createPermalinkField({
-      fieldName: 'permalink',
-      sourceField: urlFieldConfig.fieldName,
-    })
+  if (usePermalink && !indexedFields[permalinkFieldConfig.fieldName]) {
+    const field = createPermalinkField(pluginConfig, permalinkFieldConfig)
 
     updatedFields = [field, ...updatedFields]
   }

@@ -28,6 +28,9 @@ export default buildConfig({
   collections: [
     {
       slug: 'pages',
+      admin: {
+        useAsTitle: 'title',
+      },
       fields: [
         {
           name: 'title',

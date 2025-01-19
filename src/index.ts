@@ -4,7 +4,6 @@ import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 
 import type { NavigationPluginConfig } from './types.js'
 
-import { createPermalinkField } from './fields/permalinkField.js'
 import { resolveLocalizedSlugs, resolveLocalizedUrl, resolveUrl } from './hooks/index.js'
 import { enhanceFields } from './utils/enhanceFields.js'
 import { getLocales } from './utils/getLocals.js'
@@ -53,18 +52,10 @@ const createPlugin = ({
 
     // Enhance fields and configurations
     const { configs, fields } = enhanceFields({
-      config: pluginConfig,
       fields: collection.fields,
       locales,
+      pluginConfig,
     })
-
-    // // Optionally add the permalink field
-    // const permalinkField =
-    //   pluginConfig.options?.usePermalink &&
-    //   createPermalinkField({
-    //     fieldName: 'permalink',
-    //     sourceField: configs.urlFieldConfig.fieldName,
-    //   })
 
     return {
       ...collection,

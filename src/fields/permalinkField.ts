@@ -1,19 +1,22 @@
 import type { Field } from 'payload'
 
-import type { PermalinkFieldConfig } from '../types.js'
+import type { CreatePluginField, PermalinkFieldConfig } from '../types.js'
 
 import { getPluginPath } from '../utils/getPluginPath.js'
 
-export const createPermalinkField = (config: PermalinkFieldConfig): Field => {
+export const createPermalinkField: CreatePluginField<PermalinkFieldConfig, Field> = (
+  pluginConfig,
+  fieldConfig,
+): Field => {
   return {
-    name: config.fieldName,
+    name: fieldConfig.fieldName,
     type: 'ui',
     admin: {
       components: {
         Field: {
           clientProps: {
             custom: {
-              sourceField: config.sourceField,
+              sourceField: fieldConfig.sourceField,
             },
           },
           path: getPluginPath('client', '#PermalinkField'),
