@@ -8,13 +8,13 @@ import React, { useCallback, useMemo } from 'react'
 import type { SlugifyOptions } from '../types.js'
 
 import { cx } from '../utils/cx.js'
-import { slugify } from '../utils/slugify.js'
+import { generateSlug } from '../utils/slugify.js'
 import css from './SlugField.module.css'
 
 type Props = {
   custom: {
     checkboxFieldPath: string
-    slugifyOptions: SlugifyOptions
+    slugifyOptions: { remove: string } & Omit<SlugifyOptions, 'remove'>
     watchFields: string[]
   }
 } & TextFieldClientProps
@@ -46,31 +46,10 @@ export const SlugFieldClient: React.FC<Props> = ({
     return watchFields.map((watch) => fields[watch])
   })
 
-  const processedValue = useMemo(() => {
-    const separator = slugifyOptions?.replacement ?? '-'
-
-    return fields
-      .filter((item) => Boolean(item?.value))
-      .reduce((accumulator, currentValue, currentIndex) => {
-        return (
-          String(accumulator) +
-          (currentIndex > 0 ? separator : '') +
-          slugify(String(currentValue?.value), slugifyOptions)
-        )
-      }, '')
-  }, [fields, slugifyOptions])
-
-  //   useEffect(() => {
-  //     if (checkboxValue) {
-  //       if (targetFieldValue) {
-  //         const formattedSlug = formatSlug(targetFieldValue);
-
-  //         if (value !== formattedSlug) setValue(formattedSlug);
-  //       } else {
-  //         if (value !== "") setValue("");
-  //       }
-  //     }
-  //   }, [targetFieldValue, checkboxValue, setValue, value]);
+  const processedValue = useMemo(
+    () => generateSlug(fields, slugifyOptions),
+    [fields, slugifyOptions],
+  )
 
   React.useEffect(() => {
     if (processedValue !== value) {
@@ -96,7 +75,13 @@ export const SlugFieldClient: React.FC<Props> = ({
   return (
     <div className={cx('field-type', css.ctr)}>
       <div className={cx(css.label_wrapper)}>
-        <FieldLabel htmlFor={`field-${path}`} label={label} />
+        <FieldLabel
+          hideLocale={false}
+          htmlFor={`field-${path}`}
+          label={label}
+          localized={true}
+          required={field.required}
+        />
 
         <Button buttonStyle="none" className={cx(css.lock_button)} onClick={handleLock}>
           {checkboxValue ? 'Unlock' : 'Lock'}
@@ -111,4 +96,10 @@ export const SlugFieldClient: React.FC<Props> = ({
       />
     </div>
   )
+}
+
+const stringToRegex = (regexString: string): RegExp => {
+  const pattern = regexString.replace(/^\/|\/[gimsuy]*$/g, '') // Remove leading and trailing slashes and flags
+  const flags = regexString.match(/\/([gimsuy]*)$/)?.[1] || '' // Extract flags (e.g., g, i)
+  return new RegExp(pattern, flags)
 }

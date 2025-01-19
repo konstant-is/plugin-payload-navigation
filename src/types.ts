@@ -2,6 +2,7 @@ import type { NestedDocsPluginConfig } from '@payloadcms/plugin-nested-docs/type
 import type { CollectionSlug } from 'payload'
 
 export type AppendLocaleToUrlOptions = 'all' | 'exclude-default' | 'none'
+export type SlugFormat = (value: null | string | undefined) => null | string | undefined
 
 export type NavigationPluginConfig = {
   /**
@@ -13,10 +14,11 @@ export type NavigationPluginConfig = {
    * Configuration for slug and URL fields.
    */
   fields?: {
-    localizedSlugField?: Partial<LocalizedSlugFieldConfig>
-    localizedUrlField?: Partial<LocalizedUrlFieldConfig>
-    slugField?: Omit<Partial<SlugFieldConfig>, 'slugify'>
-    urlField?: Partial<UrlFieldConfig>
+    localizedSlug?: Partial<LocalizedSlugFieldConfig>
+    localizedUrl?: Partial<LocalizedUrlFieldConfig>
+    permalink?: Partial<PermalinkFieldConfig>
+    slug?: Partial<SlugFieldConfig>
+    url?: Partial<UrlFieldConfig>
   }
   /**
    * Configuration for nested document support.
@@ -27,7 +29,7 @@ export type NavigationPluginConfig = {
    */
   options?: {
     appendLocaleToUrl?: AppendLocaleToUrlOptions
-    slugify?: SlugifyOptions // Options for the slugify function
+    formatSlug?: SlugFormat
     usePermalink?: boolean
   }
 }
@@ -67,12 +69,15 @@ export type SlugFieldConfig = {
 } & BaseFieldConfig
 
 // Type for a function that generates URLs
-type GenerateURL = (data: Record<string, unknown>) => string
+type GenerateURL = (data: Record<string, unknown> | undefined) => string
 
 // Configuration for URL fields
 export type UrlFieldConfig = {
   generateUrl?: GenerateURL // Optional function to generate the URL
-} & BaseFieldConfig
+} & Omit<BaseFieldConfig, 'sourceField'>
 
 // Configuration for permalink fields
 export type PermalinkFieldConfig = BaseFieldConfig
+
+export type CreatePluginField<T, R> = (pluginConfig: NavigationPluginConfig, fieldConfig: T) => R
+export type CreateFieldConfig<T> = (config: Partial<T>, defaults: T) => T

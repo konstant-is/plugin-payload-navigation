@@ -1,15 +1,9 @@
 import type { CheckboxField, Field, FieldHook, TextField } from 'payload'
 
-import type { SlugFieldConfig } from '../types.js'
+import type { CreatePluginField, SlugFieldConfig } from '../types.js'
 
 import { getPluginPath } from '../utils/getPluginPath.js'
-import { slugify } from '../utils/slugify.js'
-
-type Props = {
-  checkboxOverrides?: Partial<CheckboxField>
-  config: SlugFieldConfig
-  slugOverrides?: Partial<TextField>
-}
+import { generateSlug } from '../utils/slugify.js'
 
 export const validateSlug =
   (config: SlugFieldConfig): FieldHook =>
@@ -40,29 +34,27 @@ export const validateSlug =
       return value
     }
 
-    const separator = config.slugify.replacement ?? '-'
-
     // Generate the slug using slugify
-    const processedSlug = fields
-      .filter((item) => Boolean(item)) // Remove null/undefined values
-      .map((fieldValue) => slugify(String(fieldValue), config.slugify)) // Slugify each field
-      .join(separator) // Join the slugified parts
+    const processedSlug = generateSlug(fields, config.slugify)
 
     return processedSlug
   }
 
-export const createSlugField = (props: Props): Field[] => {
-  const { checkboxOverrides = {}, config, slugOverrides = {} } = props || {}
-  const { useFields = ['title'] } = config
+export const createSlugField: CreatePluginField<SlugFieldConfig, Field[]> = (
+  pluginConfig,
+  fieldConfig,
+): Field[] => {
+  const { useFields = ['title'] } = fieldConfig
+
+  const { remove, ...slugifyRest } = fieldConfig.slugify
   const checkBoxField: CheckboxField = {
     name: 'slugLock',
     type: 'checkbox',
     defaultValue: true,
-    ...checkboxOverrides,
+
     admin: {
       hidden: true,
       position: 'sidebar',
-      ...checkboxOverrides.admin,
     },
   }
 
@@ -72,24 +64,25 @@ export const createSlugField = (props: Props): Field[] => {
     admin: {
       components: {
         Field: {
-          path: getPluginPath('client', '#SlugFieldClient'),
-
           clientProps: {
             custom: {
               checkboxFieldPath: checkBoxField.name,
+              // Need to pass REGEX as a string to client
+              slugifyOptions: { ...slugifyRest, remove: `${remove}` },
               watchFields: useFields,
             },
           },
+          path: getPluginPath('client', '#SlugFieldClient'),
         },
       },
       position: 'sidebar',
     },
     hooks: {
-      beforeValidate: [validateSlug(config)],
+      beforeValidate: [validateSlug(fieldConfig)],
     },
     index: true,
     localized: true,
-    // required: true,
+    required: true,
     unique: true,
   }
 
