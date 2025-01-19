@@ -7,58 +7,50 @@ import type {
   UrlFieldConfig,
 } from '../types.js'
 
-import { DEFAULT_SLUGIFY_OPTIONS } from '../constants.js'
+import { defaultValues } from '../constants.js'
 
-type CreateFieldConfig<T> = (config: Partial<T> | undefined, defaultConfig?: Partial<T>) => T
+type CreateFieldConfig<T> = (config: Partial<T> | undefined, injected?: Partial<T>) => T
 
 const createSlugFieldConfig: CreateFieldConfig<SlugFieldConfig> = (
   config = {},
-  defaultConfig = {},
 ): SlugFieldConfig => ({
-  fieldName: 'slug',
-  lockFieldName: 'slugLock',
-  useFields: ['title'],
-  ...defaultConfig,
-  ...config,
-  slugify: { ...DEFAULT_SLUGIFY_OPTIONS, ...config.slugify },
+  ...defaultValues.fields.slug,
+  slugify: { ...defaultValues.slugify, ...config.slugify },
 })
 
 const createLocalizedSlugFieldConfig: CreateFieldConfig<LocalizedSlugFieldConfig> = (
   config = {},
-  defaultConfig = {},
+  injected = {},
 ): LocalizedSlugFieldConfig => ({
-  fieldName: 'slugs',
-  locales: [],
-  ...defaultConfig,
+  ...defaultValues.fields.localizedSlug,
+  ...injected,
   ...config,
 })
 
 export const createUrlFieldConfig: CreateFieldConfig<UrlFieldConfig> = (
   config: Partial<UrlFieldConfig> = {},
-  defaultConfig = {},
+  injected = {},
 ): UrlFieldConfig => ({
-  fieldName: 'url',
-  generateUrl: undefined,
-  ...defaultConfig,
+  ...defaultValues.fields.url,
+  ...injected,
   ...config,
 })
 
 const createLocalizedUrlFieldConfig: CreateFieldConfig<LocalizedUrlFieldConfig> = (
   config = {},
-  defaultConfig = {},
+  injected = {},
 ) => ({
-  fieldName: 'urls',
-  locales: [],
-  ...defaultConfig,
+  ...defaultValues.fields.localizedUrlField,
+  ...injected,
   ...config,
 })
 
 const createPermalinkFieldConfig: CreateFieldConfig<PermalinkFieldConfig> = (
   config = {},
-  defaultConfig = {},
+  injected = {},
 ) => ({
-  fieldName: 'permalink',
-  ...defaultConfig,
+  ...defaultValues.fields.permalink,
+  ...injected,
   ...config,
 })
 
@@ -66,21 +58,15 @@ export const createFieldConfigs = (pluginConfig: NavigationPluginConfig, locales
   const fields: NavigationPluginConfig['fields'] = pluginConfig.fields || {}
 
   const slugFieldConfig = createSlugFieldConfig(fields.slug)
-
   const localizedSlugFieldConfig = createLocalizedSlugFieldConfig(fields.localizedSlug, {
     locales,
     sourceField: slugFieldConfig.fieldName,
   })
-
-  const urlFieldConfig = createUrlFieldConfig(fields.url, {
-    fieldName: 'url',
-  })
-
+  const urlFieldConfig = createUrlFieldConfig(fields.url)
   const localizedUrlFieldConfig = createLocalizedUrlFieldConfig(fields.localizedUrl, {
     locales,
     sourceField: urlFieldConfig.fieldName,
   })
-
   const permalinkFieldConfig = createPermalinkFieldConfig(fields.permalink, {
     sourceField: urlFieldConfig.fieldName,
   })

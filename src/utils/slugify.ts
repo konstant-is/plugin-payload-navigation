@@ -5,7 +5,7 @@ import s from 'slugify'
 
 import type { SlugifyOptions } from '../types.js'
 
-import { DEFAULT_SLUGIFY_OPTIONS } from '../constants.js'
+import { defaultValues } from '../constants.js'
 
 // Fallback for CommonJS or ESM default export
 export const slugify = s.default || s
@@ -30,9 +30,9 @@ const getOptions = (opts: SlugifyOptionsWithRemove): Required<SlugifyOptions> =>
   const remove = typeof opts.remove === 'string' ? stringToRegex(opts.remove) : opts.remove
 
   return {
-    ...DEFAULT_SLUGIFY_OPTIONS,
+    ...defaultValues.slugify,
     ...opts,
-    remove: remove || DEFAULT_SLUGIFY_OPTIONS.remove,
+    remove: remove || defaultValues.slugify.remove,
   }
 }
 

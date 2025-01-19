@@ -2,13 +2,13 @@ import type { CollectionBeforeChangeHook } from 'payload'
 
 import type { LocalizedSlugFieldConfig } from '../types.js'
 
-import { DEFAULT_LOCALE } from '../constants.js'
+import { defaultValues } from '../constants.js'
 
 export const resolveLocalizedSlugs =
   (config: LocalizedSlugFieldConfig): CollectionBeforeChangeHook =>
   ({ data, operation, req }) => {
     const { locale, payload } = req
-    const { defaultLocale = DEFAULT_LOCALE } = payload.config.localization || {}
+    const { defaultLocale = defaultValues.locale } = payload.config.localization || {}
     const currentLocale = locale || defaultLocale
 
     if (operation === 'create') {

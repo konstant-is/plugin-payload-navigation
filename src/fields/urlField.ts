@@ -21,6 +21,7 @@ export const createUrlField: CreatePluginField<UrlFieldConfig, Field> = (
     name: fieldConfig.fieldName,
     type: 'text',
     admin: {
+      description: 'Automatically generated url',
       position: 'sidebar',
       readOnly: true,
     },
