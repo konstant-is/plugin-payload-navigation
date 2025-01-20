@@ -189,6 +189,20 @@ The url field stores the generated URL for the document. It is often derived fro
 | sourceField | string   | "slug"    | Field name to use for generating the url                          |
 | generateUrl | function | undefined | A function that generates a custom URL based on the document data |
 
-<!-- ### `localizedSlug` -->
+### `localizedSlug`
 
-<!-- ### `localizedUrl` -->
+The `localizedSlug` field stores localized versions of the slug for different locales. It is useful for multilingual websites to ensure the slugs are language-specific and easy to access.
+
+| Field       | Type   | Default | Description                              |
+| ----------- | ------ | ------- | ---------------------------------------- |
+| fieldName   | string | "slugs" | The name of the field                    |
+| sourceField | string | "slug"  | Field name to use for the localized slug |
+
+### `localizedUrl`
+
+The localizedUrl field stores localized versions of the URL for different locales. This allows the URLs to adapt to the language and structure of the respective locale.
+
+| Field       | Type   | Default | Description                             |
+| ----------- | ------ | ------- | --------------------------------------- |
+| fieldName   | string | "urls"  | The name of the field                   |
+| sourceField | string | "url"   | Field name to use for the localized url |
