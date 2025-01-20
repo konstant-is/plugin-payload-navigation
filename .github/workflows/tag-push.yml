@@ -36,10 +36,10 @@ jobs:
       - name: Build Project
         run: pnpm run build # Replace with your build script
 
-      # Step 5: Delete unnecessary files (clean up)
-      - name: Clean up Unnecessary Files
-        run: |
-          find . -mindepth 1 -maxdepth 1 ! -name 'dist' ! -name 'package.json' -exec rm -rf {} +
+      # # Step 5: Delete unnecessary files (clean up)
+      # - name: Clean up Unnecessary Files
+      #   run: |
+      #     find . -mindepth 1 -maxdepth 1 ! -name 'dist' ! -name 'package.json' -exec rm -rf {} +
 
       # Step 6: Verify artifact content (debugging step)
       - name: List remaining files
