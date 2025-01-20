@@ -26,12 +26,12 @@ const createGitTag = () => {
 
     // Execute Git commands to create and push the tag
     console.log(`Creating Git tag: ${tagName}`)
-    execSync(`git tag ${tagName}`)
-    console.log(`Tag ${tagName} created.`)
 
-    console.log('Pushing tags to remote...')
-    execSync('git push --tags')
-    console.log('Tags pushed to remote successfully.')
+    execSync(`git tag -a ${tagName} -m "Release ${tagName}"`)
+    execSync(`git push --follow-tags`)
+    console.log(`Changes committed and tagged as ${tagName}`)
+
+    console.log(`${tagName} pushed to remote successfully`)
   } catch (error) {
     console.error('Error creating Git tag:', error.message)
     process.exit(1)

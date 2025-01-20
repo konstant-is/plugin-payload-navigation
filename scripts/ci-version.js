@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import semver from 'semver'
+import { execSync } from 'child_process'
 
 // Simulate __dirname
 const __filename = fileURLToPath(import.meta.url)
@@ -28,7 +29,13 @@ const updateVersion = (releaseType) => {
     packageJson.version = newVersion
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n', 'utf8')
-    console.log(`Version updated to ${newVersion}`)
+
+    // Commit the changes to Git
+    execSync(`git add ${packageJsonPath}`)
+    execSync(`git commit -m "chore(version): bump version to ${newVersion}"`)
+    execSync(`git push origin main`)
+
+    console.log(`\nVersion updated to ${newVersion}`)
   } catch (error) {
     console.error('Error updating package.json:', error.message)
     process.exit(1)
