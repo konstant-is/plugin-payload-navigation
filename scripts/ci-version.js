@@ -18,6 +18,8 @@ const updateVersion = (releaseType) => {
   const packageJsonPath = path.resolve(__dirname, '../package.json')
   const distPath = path.resolve(__dirname, '../dist')
 
+  console.log(distPath)
+
   try {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
 
