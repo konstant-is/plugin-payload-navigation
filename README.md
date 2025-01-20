@@ -173,11 +173,11 @@ The `fields` configuration allows you to define the behavior and properties of f
 
 The `slug` field stores a URL-friendly string derived from other fields, typically the `title`.
 
-| Field         | Type     | Default  | Description                                              |
-| ------------- | -------- | -------- | -------------------------------------------------------- |
-| fieldName     | string   | slug     | Name of the field where the slug is stored.              |
-| lockFieldName | string   | slugLock | Name of the field to lock the slug from further updates. |
-| useFields     | string[] | [title]  | Array of field names to use for generating the slug.     |
+| Field         | Type     | Default    | Description                                              |
+| ------------- | -------- | ---------- | -------------------------------------------------------- |
+| fieldName     | string   | "slug"     | Name of the field where the slug is stored.              |
+| lockFieldName | string   | "slugLock" | Name of the field to lock the slug from further updates. |
+| useFields     | string[] | ["title"]  | Array of field names to use for generating the slug.     |
 
 <!-- ### `url`
 
