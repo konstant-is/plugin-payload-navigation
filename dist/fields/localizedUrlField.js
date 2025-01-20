@@ -1,17 +1,16 @@
-export const createLocalizedUrlField = (config)=>{
+export const createLocalizedUrlField = ({ context, fieldConfig })=>{
     return {
-        name: config.fieldName,
+        name: fieldConfig.fieldName,
         type: 'group',
         admin: {
             description: 'Automatically generated localized urls.',
             readOnly: true
         },
-        fields: config.locales.map((locale)=>({
+        fields: context.locales.map((locale)=>({
                 name: locale,
                 type: 'text',
                 defaultValue: '',
-                localized: false,
-                required: true
+                localized: false
             })),
         localized: false
     };

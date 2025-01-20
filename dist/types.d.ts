@@ -1,41 +1,36 @@
 import type { NestedDocsPluginConfig } from '@payloadcms/plugin-nested-docs/types';
 import type { CollectionSlug } from 'payload';
+import type { PluginContext } from './utils/createPluginContext.js';
 export type AppendLocaleToUrlOptions = 'all' | 'exclude-default' | 'none';
 export type NavigationPluginConfig = {
+    appendLocaleToUrl?: AppendLocaleToUrlOptions;
     /**
      * Collections this plugin should extend. If you need different configs for different collections, this plugin can be added to your config more than once with different collections.
      */
     collections: CollectionSlug[];
     disabled?: boolean;
+    fallbackLocale?: string;
     /**
      * Configuration for slug and URL fields.
      */
     fields?: {
-        localizedSlugField?: Partial<LocalizedSlugFieldConfig>;
-        localizedUrlField?: Partial<LocalizedUrlFieldConfig>;
-        slugField?: Omit<Partial<SlugFieldConfig>, 'slugify'>;
-        urlField?: Partial<UrlFieldConfig>;
+        localizedSlug?: Partial<LocalizedSlugFieldConfig>;
+        localizedUrl?: Partial<LocalizedUrlFieldConfig>;
+        permalink?: Partial<PermalinkFieldConfig>;
+        slug?: Partial<SlugFieldConfig>;
+        url?: Partial<UrlFieldConfig>;
     };
     /**
      * Configuration for nested document support.
      */
     nestedDocsPlugin?: Omit<NestedDocsPluginConfig, 'collections'>;
-    /**
-     * Options for handling URL generation.
-     */
-    options?: {
-        appendLocaleToUrl?: AppendLocaleToUrlOptions;
-        slugify?: SlugifyOptions;
-        usePermalink?: boolean;
-    };
+    permalinkEnabled?: boolean;
+    slugifyOptions?: SlugifyOptions;
 };
 type BaseFieldConfig = {
     fieldName: string;
     sourceField?: string;
 };
-type LocalizedFieldConfig = {
-    locales: string[];
-} & BaseFieldConfig;
 export type SlugifyOptions = {
     locale?: string;
     lower?: boolean;
@@ -44,16 +39,19 @@ export type SlugifyOptions = {
     strict?: boolean;
     trim?: boolean;
 };
-export type LocalizedSlugFieldConfig = LocalizedFieldConfig;
-export type LocalizedUrlFieldConfig = LocalizedFieldConfig;
+export type LocalizedSlugFieldConfig = BaseFieldConfig;
+export type LocalizedUrlFieldConfig = BaseFieldConfig;
 export type SlugFieldConfig = {
     lockFieldName: string;
-    slugify: SlugifyOptions;
     useFields: string[];
 } & BaseFieldConfig;
-type GenerateURL = (data: Record<string, unknown>) => string;
+type GenerateURL = (data: Record<string, unknown> | undefined) => string;
 export type UrlFieldConfig = {
     generateUrl?: GenerateURL;
-} & BaseFieldConfig;
+} & Omit<BaseFieldConfig, 'sourceField'>;
 export type PermalinkFieldConfig = BaseFieldConfig;
+export type CreatePluginField<T, R> = (params: {
+    context: PluginContext;
+    fieldConfig: T;
+}) => R;
 export {};

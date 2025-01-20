@@ -1,2 +1,2 @@
-export { PermalinkFieldClient } from '../components/PermalinkFieldClient.jsx';
-export { SlugFieldClient } from '../components/SlugFieldClient.jsx';
+export { PermalinkField } from '../components/PermalinkField.js';
+export { SlugFieldClient } from '../components/SlugFieldClient.js';

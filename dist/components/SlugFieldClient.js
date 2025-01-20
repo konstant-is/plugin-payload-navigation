@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { Button, FieldLabel, TextInput, useField, useForm, useFormFields } from '@payloadcms/ui';
 import React, { useCallback, useMemo } from 'react';
 import { cx } from '../utils/cx.js';
-import { slugify } from '../utils/slugify.js';
+import { generateSlug } from '../utils/slugify.js';
 import css from './SlugField.module.css';
 export const SlugFieldClient = ({ custom, field, path, readOnly: readOnlyFromProps })=>{
     const { label } = field;
@@ -21,25 +21,10 @@ export const SlugFieldClient = ({ custom, field, path, readOnly: readOnlyFromPro
     const fields = useFormFields(([fields])=>{
         return watchFields.map((watch)=>fields[watch]);
     });
-    const processedValue = useMemo(()=>{
-        const separator = slugifyOptions?.replacement ?? '-';
-        return fields.filter((item)=>Boolean(item?.value)).reduce((accumulator, currentValue, currentIndex)=>{
-            return String(accumulator) + (currentIndex > 0 ? separator : '') + slugify(String(currentValue?.value), slugifyOptions);
-        }, '');
-    }, [
+    const processedValue = useMemo(()=>generateSlug(fields, slugifyOptions), [
         fields,
         slugifyOptions
     ]);
-    //   useEffect(() => {
-    //     if (checkboxValue) {
-    //       if (targetFieldValue) {
-    //         const formattedSlug = formatSlug(targetFieldValue);
-    //         if (value !== formattedSlug) setValue(formattedSlug);
-    //       } else {
-    //         if (value !== "") setValue("");
-    //       }
-    //     }
-    //   }, [targetFieldValue, checkboxValue, setValue, value]);
     React.useEffect(()=>{
         if (processedValue !== value) {
             setValue(processedValue);
@@ -69,8 +54,11 @@ export const SlugFieldClient = ({ custom, field, path, readOnly: readOnlyFromPro
                 className: cx(css.label_wrapper),
                 children: [
                     /*#__PURE__*/ _jsx(FieldLabel, {
+                        hideLocale: false,
                         htmlFor: `field-${path}`,
-                        label: label
+                        label: label,
+                        localized: true,
+                        required: field.required
                     }),
                     /*#__PURE__*/ _jsx(Button, {
                         buttonStyle: "none",

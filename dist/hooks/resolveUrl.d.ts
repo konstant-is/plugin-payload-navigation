@@ -1,3 +1,3 @@
 import type { CollectionBeforeChangeHook } from 'payload';
-import type { NavigationPluginConfig, UrlFieldConfig } from '../types.js';
-export declare const resolveUrl: (pluginConfig: NavigationPluginConfig, config: UrlFieldConfig) => CollectionBeforeChangeHook;
+import type { PluginContext } from '../utils/createPluginContext.js';
+export declare const resolveUrl: (context: PluginContext) => CollectionBeforeChangeHook;

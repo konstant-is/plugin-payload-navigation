@@ -1,3 +1,3 @@
 import type { CollectionBeforeChangeHook } from 'payload';
-import type { LocalizedSlugFieldConfig } from '../types.js';
-export declare const resolveLocalizedSlugs: (config: LocalizedSlugFieldConfig) => CollectionBeforeChangeHook;
+import type { PluginContext } from '../utils/createPluginContext.js';
+export declare const resolveLocalizedSlugs: (context: PluginContext) => CollectionBeforeChangeHook;

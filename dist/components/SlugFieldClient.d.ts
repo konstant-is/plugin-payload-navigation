@@ -4,7 +4,9 @@ import type { SlugifyOptions } from '../types.js';
 type Props = {
     custom: {
         checkboxFieldPath: string;
-        slugifyOptions: SlugifyOptions;
+        slugifyOptions: {
+            remove: string;
+        } & Omit<SlugifyOptions, 'remove'>;
         watchFields: string[];
     };
 } & TextFieldClientProps;

@@ -1,3 +1,3 @@
 import type { Config } from 'payload';
 import type { NavigationPluginConfig } from './types.js';
-export declare const navigationPlugin: (pluginConfig: NavigationPluginConfig) => (config: Config) => Promise<Config>;
+export declare const navigationPlugin: (navigationConfig: NavigationPluginConfig) => (config: Config) => Promise<Config>;

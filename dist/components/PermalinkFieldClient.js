@@ -2,9 +2,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useDocumentInfo, useFormFields } from '@payloadcms/ui';
 import { useMemo } from 'react';
-import { getClientSideURL } from '../utils/getUrl.js';
 export const PermalinkFieldClient = ({ custom })=>{
-    const serverURL = getClientSideURL();
+    const { serverURL } = custom;
     const { id } = useDocumentInfo();
     // Listen to the field value
     const targetFieldValue = useFormFields(([fields])=>{

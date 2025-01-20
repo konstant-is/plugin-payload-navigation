@@ -1,3 +1,3 @@
 import type { CollectionBeforeChangeHook } from 'payload';
-import type { LocalizedUrlFieldConfig } from '../types.js';
-export declare const resolveLocalizedUrl: (config: LocalizedUrlFieldConfig) => CollectionBeforeChangeHook;
+import type { PluginContext } from 'src/utils/createPluginContext.js';
+export declare const resolveLocalizedUrl: (context: PluginContext) => CollectionBeforeChangeHook;

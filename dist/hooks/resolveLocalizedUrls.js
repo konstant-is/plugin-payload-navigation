@@ -1,19 +1,19 @@
-import { DEFAULT_LOCALE } from '../constants.js';
-export const resolveLocalizedUrl = (config)=>({ data, operation, req })=>{
+export const resolveLocalizedUrl = (context)=>({ data, operation, req })=>{
         const { locale, payload } = req;
-        const { defaultLocale = DEFAULT_LOCALE } = payload.config.localization || {};
-        const currentLocale = locale || defaultLocale || 'en';
+        const { defaultLocale = context.fallbackLocale } = payload.config.localization || {};
+        const currentLocale = locale || defaultLocale;
+        const { localizedUrlFieldConfig } = context.fieldConfigs;
         if (operation === 'create') {
             return data;
         }
-        const sourceField = config.sourceField ? data[config.sourceField] : undefined;
+        const sourceField = localizedUrlFieldConfig.sourceField ? data[localizedUrlFieldConfig.sourceField] : undefined;
         if (!sourceField) {
-            payload.logger.error(`Error: Missing source field "${config.sourceField}" while resolving localized url.`);
+            payload.logger.error(`Error: Missing source field "${localizedUrlFieldConfig.sourceField}" while resolving localized url.`);
             return data;
         }
-        const field = data[config.fieldName] || {};
+        const field = data[localizedUrlFieldConfig.fieldName] || {};
         if (typeof field !== 'object') {
-            payload.logger.error(`Error: Localized url field "${config.fieldName}" is not an object.`);
+            payload.logger.error(`Error: Localized url field "${localizedUrlFieldConfig.fieldName}" is not an object.`);
             return data;
         }
         const updated = {
@@ -22,7 +22,7 @@ export const resolveLocalizedUrl = (config)=>({ data, operation, req })=>{
         };
         return {
             ...data,
-            [config.fieldName]: updated
+            [localizedUrlFieldConfig.fieldName]: updated
         };
     };
 

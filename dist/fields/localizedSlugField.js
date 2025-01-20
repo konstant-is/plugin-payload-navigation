@@ -1,16 +1,15 @@
-export const createLocalizedSlugsField = (config)=>({
-        name: config.fieldName,
+export const createLocalizedSlugsField = ({ context, fieldConfig })=>({
+        name: fieldConfig.fieldName,
         type: 'group',
         admin: {
             description: 'Automatically generated localized slugs.',
             readOnly: true
         },
-        fields: config.locales.map((locale)=>({
+        fields: context.locales.map((locale)=>({
                 name: locale,
                 type: 'text',
                 defaultValue: '',
-                localized: false,
-                required: true
+                localized: false
             })),
         localized: false
     });

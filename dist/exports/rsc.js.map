@@ -1,1 +1,1 @@
-{"version":3,"sources":["../../src/exports/rsc.ts"],"sourcesContent":["export { BeforeDashboardServer } from '../components/BeforeDashboardServer.js'\n"],"names":["BeforeDashboardServer"],"mappings":"AAAA,SAASA,qBAAqB,QAAQ,yCAAwC"}
+{"version":3,"sources":["../../src/exports/rsc.ts"],"names":[],"mappings":""}

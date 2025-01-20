@@ -1,13 +1,14 @@
-import { slugify } from '../utils/slugify.js';
-export const validateSlug = (config)=>({ data, req, siblingData, value })=>{
-        const slugLock = siblingData[config.lockFieldName];
+import { getPluginPath } from '../utils/getPluginPath.js';
+import { generateSlug, normalizeSlugOptions } from '../utils/slugify.js';
+export const validateSlug = (context)=>({ data, req, siblingData, value })=>{
+        const { slugFieldConfig } = context.fieldConfigs;
         // If the slug is locked, return the existing value
-        if (!slugLock) {
+        if (!siblingData[slugFieldConfig.lockFieldName]) {
             return value;
         }
         const missingFields = [];
         // Collect values of the fields used for slug generation
-        const fields = config.useFields.map((field)=>{
+        const fields = slugFieldConfig.useFields.map((field)=>{
             const fieldValue = data?.[field] || null;
             if (!fieldValue) {
                 missingFields.push(field) // Track missing fields
@@ -20,28 +21,21 @@ export const validateSlug = (config)=>({ data, req, siblingData, value })=>{
             req.payload.logger.warn('Missing fields for slug generation:', missingFields);
             return value;
         }
-        const separator = config.slugify.replacement ?? '-';
         // Generate the slug using slugify
-        const processedSlug = fields.filter((item)=>Boolean(item)) // Remove null/undefined values
-        .map((fieldValue)=>slugify(String(fieldValue), config.slugify)) // Slugify each field
-        .join(separator) // Join the slugified parts
-        ;
+        const processedSlug = generateSlug(fields, context.slugifyOptions);
         return processedSlug;
     };
-export const createSlugField = (props)=>{
-    const { checkboxOverrides = {}, config, slugOverrides = {} } = props || {};
+export const createSlugField = ({ context, fieldConfig })=>{
     const { useFields = [
         'title'
-    ] } = config;
+    ] } = fieldConfig;
     const checkBoxField = {
         name: 'slugLock',
         type: 'checkbox',
         defaultValue: true,
-        ...checkboxOverrides,
         admin: {
             hidden: true,
-            position: 'sidebar',
-            ...checkboxOverrides.admin
+            position: 'sidebar'
         }
     };
     const slugField = {
@@ -50,21 +44,21 @@ export const createSlugField = (props)=>{
         admin: {
             components: {
                 Field: {
-                    path: `payload-plugin-navigation/client#SlugFieldClient`,
-                    // getPluginPath('client', '#SlugFieldClient'),
                     clientProps: {
                         custom: {
                             checkboxFieldPath: checkBoxField.name,
+                            slugifyOptions: normalizeSlugOptions(context.slugifyOptions),
                             watchFields: useFields
                         }
-                    }
+                    },
+                    path: getPluginPath('client', '#SlugFieldClient')
                 }
             },
             position: 'sidebar'
         },
         hooks: {
             beforeValidate: [
-                validateSlug(config)
+                validateSlug(context)
             ]
         },
         index: true,

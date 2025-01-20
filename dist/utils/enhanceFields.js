@@ -1,6 +1,5 @@
 import { createLocalizedSlugsField, createLocalizedUrlField, createPermalinkField, createSlugField, createUrlField } from '../fields/index.js';
-import { createFieldConfigs } from './createFieldConfigs.js';
-export const enhanceFields = ({ config, fields, locales })=>{
+export const enhanceFields = ({ context, fields })=>{
     let updatedFields = [
         ...fields
     ] // Start with a copy of the existing fields
@@ -24,56 +23,57 @@ export const enhanceFields = ({ config, fields, locales })=>{
             }
         });
     };
-    // Generate configurations
-    const { localizedSlugFieldConfig, localizedUrlFieldConfig, slugFieldConfig, urlFieldConfig } = createFieldConfigs(config, locales);
+    const { localizedSlugFieldConfig, localizedUrlFieldConfig, permalinkFieldConfig, slugFieldConfig, urlFieldConfig } = context.fieldConfigs;
     // Add slug fields
     if (!indexedFields[slugFieldConfig.fieldName]) {
         const slugFields = createSlugField({
-            config: slugFieldConfig
+            context,
+            fieldConfig: slugFieldConfig
         });
         addFields(slugFields) // Handles multiple slug-related fields
         ;
     }
     // Add localized slug fields
     if (!indexedFields[localizedSlugFieldConfig.fieldName]) {
-        const localizedField = createLocalizedSlugsField(localizedSlugFieldConfig);
+        const localizedField = createLocalizedSlugsField({
+            context,
+            fieldConfig: localizedSlugFieldConfig
+        });
         addFields([
             localizedField
         ]);
     }
     // Add URL fields
     if (!indexedFields[urlFieldConfig.fieldName]) {
-        const field = createUrlField(urlFieldConfig);
+        const field = createUrlField({
+            context,
+            fieldConfig: urlFieldConfig
+        });
         addFields([
             field
         ]);
     }
     // Add Localized URL field
     if (!indexedFields[localizedUrlFieldConfig.fieldName]) {
-        const field = createLocalizedUrlField(localizedUrlFieldConfig);
+        const field = createLocalizedUrlField({
+            context,
+            fieldConfig: localizedUrlFieldConfig
+        });
         addFields([
             field
         ]);
     }
-    if (config.options?.usePermalink && !indexedFields['permalink']) {
+    if (context.permalinkEnabled && !indexedFields[permalinkFieldConfig.fieldName]) {
         const field = createPermalinkField({
-            fieldName: 'permalink',
-            sourceField: urlFieldConfig.fieldName
+            context,
+            fieldConfig: permalinkFieldConfig
         });
         updatedFields = [
             field,
             ...updatedFields
         ];
     }
-    return {
-        configs: {
-            localizedSlugFieldConfig,
-            localizedUrlFieldConfig,
-            slugFieldConfig,
-            urlFieldConfig
-        },
-        fields: updatedFields
-    };
+    return updatedFields;
 };
 
 //# sourceMappingURL=enhanceFields.js.map

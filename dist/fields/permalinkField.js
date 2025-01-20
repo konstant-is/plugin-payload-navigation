@@ -1,17 +1,17 @@
 import { getPluginPath } from '../utils/getPluginPath.js';
-export const createPermalinkField = (config)=>{
+export const createPermalinkField = ({ fieldConfig })=>{
     return {
-        name: config.fieldName,
+        name: fieldConfig.fieldName,
         type: 'ui',
         admin: {
             components: {
                 Field: {
                     clientProps: {
                         custom: {
-                            sourceField: config.sourceField
+                            sourceField: fieldConfig.sourceField
                         }
                     },
-                    path: getPluginPath('client', '#PermalinkFieldClient')
+                    path: getPluginPath('client', '#PermalinkField')
                 }
             }
         }
