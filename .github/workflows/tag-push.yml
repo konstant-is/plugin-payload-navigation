@@ -1,0 +1,32 @@
+name: Build on Tag Push
+
+on:
+  push:
+    tags:
+      - '*' # Matches all tags (you can customize this to match specific patterns)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22' # Replace with your desired Node.js version
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build Project
+        run: pnpm run build # Replace with your build command
+
+      - name: Publish Artifacts (Optional)
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: ./build # Replace with the path to your build output
