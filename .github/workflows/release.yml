@@ -8,6 +8,7 @@ on:
 env:
   NODE_VERSION: 22.6.0
   PNPM_VERSION: 9.7.1
+  KEEP: '.git .github dist release'
 
 jobs:
   create-release:
@@ -34,23 +35,21 @@ jobs:
       - name: Build Project
         run: pnpm run build
 
-      - name: Clean workspace
+      - name: Clean Workspace
         run: |
-          rm -rf src dev scripts .vscode
-          rm tsconfig.json eslint.config.js .swcrc .prettierrc.json
-          rm package.json .gitignore
+          # Convert KEEP into an array of patterns for exclusion
+          echo "Preserving: $KEEP"
+          for keep_item in $KEEP; do
+            exclusions="$exclusions ! -name $keep_item"
+          done
+
+          # Delete all files and folders except those in KEEP
+          eval "find . -mindepth 1 -maxdepth 1 $exclusions -exec rm -rf {} +"
+          ls
 
       - name: Prepare Release Files
         run: |
-          # Copy artifacts to release file
-          cp -R .github release
-          cp -R dist release
-
-
-          # Delete all files and folders except `.git` and `release`
-          find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'release' -exec rm -rf {} +
-
-           # Copy release files back to the root and clean release folder
+          # Copy release files back to the root and clean release folder
           cp -R release/* .
           rm -rf release
 
