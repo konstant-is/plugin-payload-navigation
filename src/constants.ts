@@ -10,9 +10,8 @@ import type {
 
 export const PLUGIN_PATH = 'payload-plugin-navigation'
 
-const defaultLocale = 'en'
 export const defaultSlugify: Required<SlugifyOptions> = {
-  locale: defaultLocale,
+  locale: 'en',
   lower: true,
   remove: /[*+~.()'"!:@]/g,
   replacement: '-',
@@ -21,33 +20,32 @@ export const defaultSlugify: Required<SlugifyOptions> = {
 }
 type DefaultValues = {
   appendLocaleToUrl: AppendLocaleToUrlOptions
+  fallbackLocale: string
   fields: {
     localizedSlug: LocalizedSlugFieldConfig
-    localizedUrlField: LocalizedUrlFieldConfig
+    localizedUrl: LocalizedUrlFieldConfig
     permalink: PermalinkFieldConfig
     slug: SlugFieldConfig
     url: UrlFieldConfig
   }
-  locale: string
-  slugify: Required<SlugifyOptions>
+  permalinkEnabled: boolean
+  slugifyOptions: Required<SlugifyOptions>
 }
 export const defaultValues: DefaultValues = {
   appendLocaleToUrl: 'exclude-default',
+  fallbackLocale: 'en',
   fields: {
     slug: {
       fieldName: 'slug',
       lockFieldName: 'slugLock',
-      slugify: defaultSlugify,
       useFields: ['title'],
     },
     localizedSlug: {
       fieldName: 'slugs',
-      locales: [defaultLocale],
       sourceField: 'slug',
     },
-    localizedUrlField: {
+    localizedUrl: {
       fieldName: 'urls',
-      locales: [defaultLocale],
       sourceField: 'url',
     },
     permalink: {
@@ -58,6 +56,6 @@ export const defaultValues: DefaultValues = {
       fieldName: 'url',
     },
   },
-  locale: defaultLocale,
-  slugify: defaultSlugify,
+  permalinkEnabled: true,
+  slugifyOptions: defaultSlugify,
 }

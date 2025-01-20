@@ -1,24 +1,25 @@
 import type { CheckboxField, Field, FieldHook, TextField } from 'payload'
 
 import type { CreatePluginField, SlugFieldConfig } from '../types.js'
+import type { PluginContext } from '../utils/createPluginContext.js'
 
 import { getPluginPath } from '../utils/getPluginPath.js'
-import { generateSlug } from '../utils/slugify.js'
+import { generateSlug, normalizeSlugOptions } from '../utils/slugify.js'
 
 export const validateSlug =
-  (config: SlugFieldConfig): FieldHook =>
+  (context: PluginContext): FieldHook =>
   ({ data, req, siblingData, value }) => {
-    const slugLock = siblingData[config.lockFieldName]
+    const { slugFieldConfig } = context.fieldConfigs
 
     // If the slug is locked, return the existing value
-    if (!slugLock) {
+    if (!siblingData[slugFieldConfig.lockFieldName]) {
       return value
     }
 
     const missingFields: string[] = []
 
     // Collect values of the fields used for slug generation
-    const fields = config.useFields.map((field) => {
+    const fields = slugFieldConfig.useFields.map((field) => {
       const fieldValue = data?.[field] || null
 
       if (!fieldValue) {
@@ -35,17 +36,17 @@ export const validateSlug =
     }
 
     // Generate the slug using slugify
-    const processedSlug = generateSlug(fields, config.slugify)
+    const processedSlug = generateSlug(fields, context.slugifyOptions)
 
     return processedSlug
   }
 
 export const createSlugField: CreatePluginField<SlugFieldConfig, Field[]> = ({
+  context,
   fieldConfig,
 }): Field[] => {
   const { useFields = ['title'] } = fieldConfig
 
-  const { remove, ...slugifyRest } = fieldConfig.slugify
   const checkBoxField: CheckboxField = {
     name: 'slugLock',
     type: 'checkbox',
@@ -66,8 +67,7 @@ export const createSlugField: CreatePluginField<SlugFieldConfig, Field[]> = ({
           clientProps: {
             custom: {
               checkboxFieldPath: checkBoxField.name,
-              // Need to pass REGEX as a string to client
-              slugifyOptions: { ...slugifyRest, remove: `${remove}` },
+              slugifyOptions: normalizeSlugOptions(context.slugifyOptions),
               watchFields: useFields,
             },
           },
@@ -77,7 +77,7 @@ export const createSlugField: CreatePluginField<SlugFieldConfig, Field[]> = ({
       position: 'sidebar',
     },
     hooks: {
-      beforeValidate: [validateSlug(fieldConfig)],
+      beforeValidate: [validateSlug(context)],
     },
     index: true,
     localized: true,

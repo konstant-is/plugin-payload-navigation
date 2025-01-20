@@ -27,10 +27,6 @@ export type NavigationPluginConfig = {
    * Configuration for nested document support.
    */
   nestedDocsPlugin?: Omit<NestedDocsPluginConfig, 'collections'>
-  /**
-   * Options for handling URL generation.
-   */
-
   permalinkEnabled?: boolean
   slugifyOptions?: SlugifyOptions
 }
@@ -60,7 +56,6 @@ export type LocalizedUrlFieldConfig = BaseFieldConfig
 // Configuration for regular slug fields
 export type SlugFieldConfig = {
   lockFieldName: string // Field to store the lock status
-  slugify: SlugifyOptions // Options for the slugify function
   useFields: string[] // Fields to generate the slug from
 } & BaseFieldConfig
 
@@ -76,5 +71,3 @@ export type UrlFieldConfig = {
 export type PermalinkFieldConfig = BaseFieldConfig
 
 export type CreatePluginField<T, R> = (params: { context: PluginContext; fieldConfig: T }) => R
-
-export type CreateFieldConfig<T> = (config: Partial<T>, defaults: T) => T

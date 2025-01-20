@@ -10,12 +10,15 @@ import { defaultValues } from '../constants.js'
 // Fallback for CommonJS or ESM default export
 export const slugify = s.default || s
 
+// Type with flexible `remove` property
 type SlugifyOptionsWithRemove = {
   remove?: RegExp | string
 } & Omit<SlugifyOptions, 'remove'>
 
 /**
  * Convert a string representation of a RegExp (e.g., `/pattern/flags`) into a RegExp object.
+ * @param regexString - The string representation of a RegExp.
+ * @returns The RegExp object.
  */
 const stringToRegex = (regexString: string): RegExp => {
   const pattern = regexString.replace(/^\/|\/[gimsuy]*$/g, '') // Strip leading/trailing slashes and flags
@@ -24,15 +27,17 @@ const stringToRegex = (regexString: string): RegExp => {
 }
 
 /**
- * Merge user-provided slugify options with defaults.
+ * Merge user-provided slugify options with default values.
+ * @param opts - The user-provided slugify options.
+ * @returns The merged options.
  */
 const getOptions = (opts: SlugifyOptionsWithRemove): Required<SlugifyOptions> => {
   const remove = typeof opts.remove === 'string' ? stringToRegex(opts.remove) : opts.remove
 
   return {
-    ...defaultValues.slugify,
+    ...defaultValues.slugifyOptions,
     ...opts,
-    remove: remove || defaultValues.slugify.remove,
+    remove: remove || defaultValues.slugifyOptions.remove,
   }
 }
 
@@ -52,4 +57,14 @@ export const generateSlug = (
     .filter((item) => Boolean(item && (typeof item === 'string' || item?.value))) // Filter null/undefined
     .map((item) => slugify(typeof item === 'string' ? item : String(item?.value), options))
     .join(options.replacement) // Join the slugified parts
+}
+
+/**
+ * Normalize slugify options by converting `remove` to a string representation.
+ * @param options - The slugify options to normalize.
+ * @returns The normalized options.
+ */
+export const normalizeSlugOptions = (options: SlugifyOptions): SlugifyOptionsWithRemove => {
+  const { remove, ...rest } = options
+  return { ...rest, remove: `${remove}` }
 }

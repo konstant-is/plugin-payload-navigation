@@ -1,7 +1,8 @@
 import type { CollectionBeforeChangeHook } from 'payload'
-import type { PluginContext } from 'src/utils/createPluginContext.js'
 
-import { generateLocalizedUrl } from 'src/utils/generateUrl.js'
+import type { PluginContext } from '../utils/createPluginContext.js'
+
+import { generateLocalizedUrl } from '../utils/generateUrl.js'
 
 export const resolveUrl =
   (context: PluginContext): CollectionBeforeChangeHook =>

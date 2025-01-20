@@ -97,9 +97,3 @@ export const SlugFieldClient: React.FC<Props> = ({
     </div>
   )
 }
-
-const stringToRegex = (regexString: string): RegExp => {
-  const pattern = regexString.replace(/^\/|\/[gimsuy]*$/g, '') // Remove leading and trailing slashes and flags
-  const flags = regexString.match(/\/([gimsuy]*)$/)?.[1] || '' // Extract flags (e.g., g, i)
-  return new RegExp(pattern, flags)
-}
