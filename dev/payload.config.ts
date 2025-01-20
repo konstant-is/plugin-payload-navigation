@@ -72,10 +72,6 @@ export default buildConfig({
           }, '')
         },
       },
-      options: {
-        appendLocaleToUrl: 'exclude-default',
-        usePermalink: true,
-      },
     }),
   ],
 
