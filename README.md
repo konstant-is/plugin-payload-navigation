@@ -107,7 +107,7 @@ If the `fallbackLocale` is set to `'en'` and a request is made without a specifi
 fallbackLocale: 'en'
 ```
 
-## `PermalinkEnabled`
+## `permalinkEnabled`
 
 Enables or disables the generation of permalinks for collections
 
@@ -122,19 +122,18 @@ Enables or disables the generation of permalinks for collections
 permalinkEnabled: true
 ```
 
-### `nestedDocsPlugin`
-
-#### Description
+## `nestedDocsPlugin`
 
 The `nestedDocsPlugin` configuration enables support for hierarchical document structures, integrating with the [Nested Docs Plugin](https://github.com/payloadcms/plugin-nested-docs). This is useful for creating and managing nested navigation structures such as page hierarchies.
 
-#### Available Options
-
 The `nestedDocsPlugin` configuration inherits all options from the [Nested Docs Plugin](https://payloadcms.com/docs/plugins/nested-docs#generateurl), except for the `collections` property, which is managed by the `Navigation Plugin`.
 
-#### Default Configuration
+#### Configuration
 
 The plugin does not enable nested document support by default. To use this feature, pass a configuration object for the `nestedDocsPlugin`.
+
+- If `nestedDocsPlugin` is not provided, the plugin assumes that documents are flat and independent, without hierarchy.
+- This feature is optional and can be omitted if nested navigation is not required.
 
 #### Example Usage
 
@@ -148,17 +147,6 @@ navigationPlugin({
   },
 })
 ```
-
-**Notes**
-
-- If nestedDocsPlugin is not provided, the plugin assumes that documents are flat and independent, without hierarchy.
-- This feature is optional and can be omitted if nested navigation is not required.
-
-## `fields`
-
-### Description
-
-The `fields` configuration allows you to define the behavior and properties of fields added by the plugin. These fields handle slugs, URLs, and other navigation-related properties.
 
 ### `slugifyOptions`
 
@@ -211,6 +199,10 @@ The `slugifyOptions` configuration allows you to customize the behavior of the s
   trim: true,
 }
 ```
+
+## `fields`
+
+The `fields` configuration allows you to define the behavior and properties of fields added by the plugin. These fields handle slugs, URLs, and other navigation-related properties.
 
 ### Available Fields
 
