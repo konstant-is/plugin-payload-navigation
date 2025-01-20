@@ -179,7 +179,7 @@ The `slug` field stores a URL-friendly string derived from other fields, typical
 | lockFieldName | string   | slugLock | Name of the field to lock the slug from further updates. |
 | useFields     | string[] | [title]  | Array of field names to use for generating the slug.     |
 
-### `url`
+<!-- ### `url`
 
 The url field stores the generated URL for the document. It is often derived from the slug and can optionally include locale prefixes.
 
@@ -201,4 +201,4 @@ url: {
 
 ### `localizedSlug`
 
-### `localizedUrl`
+### `localizedUrl` -->
