@@ -45,15 +45,12 @@ jobs:
 
           # Delete all files and folders except those in KEEP
           eval "find . -mindepth 1 -maxdepth 1 $exclusions -exec rm -rf {} +"
-          ls
 
       - name: Prepare Release Files
         run: |
           # Copy release files back to the root and clean release folder
           cp -R release/* .
           rm -rf release
-
-          ls
 
           git add .
           git commit -m "chore(release): prepare release for v${{ github.ref_name }}"
@@ -62,9 +59,3 @@ jobs:
         run: |
           git checkout -b release-${{ github.ref_name }}
           git push origin release-${{ github.ref_name }}
-
-      # - name: Publish Artifacts (Optional)
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: release-artifacts
-      #     path: ./dist
