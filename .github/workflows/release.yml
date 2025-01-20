@@ -25,6 +25,12 @@ jobs:
           pnpm-version: ${{ env.PNPM_VERSION }}
           pnpm-run-install: true
 
+      # Step 3: Configure Git User
+      - name: Configure Git User
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Build Project
         run: pnpm run build
 
@@ -36,9 +42,20 @@ jobs:
 
       - name: Prepare Release Files
         run: |
-          mkdir -p release-folder
-          cp -R release/* . # Copy release files to the root
-          git add package.json .gitignore dist
+          # Copy artifacts to release file
+          cp -R .github release
+          cp -R dist release
+
+          # Delete all root files exept release folder
+          find . -mindepth 1 -maxdepth 1 ! -name 'release' -exec rm -rf {} +
+
+           # Copy release files back to the root and clean release folder
+          cp -R release/* .
+          rm -rf release
+
+          ls
+
+          git add .
           git commit -m "chore(release): prepare release for v${{ github.ref_name }}"
 
       - name: Push Release Branch
@@ -46,8 +63,8 @@ jobs:
           git checkout -b release-${{ github.ref_name }}
           git push origin release-${{ github.ref_name }}
 
-      - name: Publish Artifacts (Optional)
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-artifacts
-          path: ./dist
+      # - name: Publish Artifacts (Optional)
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: release-artifacts
+      #     path: ./dist
