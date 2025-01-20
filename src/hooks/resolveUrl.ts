@@ -1,65 +1,22 @@
 import type { CollectionBeforeChangeHook } from 'payload'
+import type { PluginContext } from 'src/utils/createPluginContext.js'
 
-import type { AppendLocaleToUrlOptions, NavigationPluginConfig, UrlFieldConfig } from '../types.js'
-
-import { DEFAULT_LOCALE } from '../constants.js'
+import { generateLocalizedUrl } from 'src/utils/generateUrl.js'
 
 export const resolveUrl =
-  (pluginConfig: NavigationPluginConfig, config: UrlFieldConfig): CollectionBeforeChangeHook =>
+  (context: PluginContext): CollectionBeforeChangeHook =>
   ({ data, req }) => {
-    const { locale, payload } = req
-    const { defaultLocale = DEFAULT_LOCALE } = payload.config.localization || {}
-    const currentLocale = locale || defaultLocale || 'en'
-    const useNestedDocs = pluginConfig.nestedDocsPlugin !== undefined
-
-    // Generate the base URL
-    const baseUrl = generateUrl(config, data, useNestedDocs)
+    const { urlFieldConfig } = context.fieldConfigs
 
     // Resolve the final URL by appending locale if needed
-    const resolvedUrl = resolveFinalUrl({
-      appendTo: pluginConfig.options?.appendLocaleToUrl,
-      baseUrl,
-      defaultLocale,
-      locale: currentLocale,
+    const url = generateLocalizedUrl({
+      context,
+      data,
+      req,
     })
 
     return {
       ...data,
-      [config.fieldName]: resolvedUrl,
+      [urlFieldConfig.fieldName]: url,
     }
   }
-
-const generateUrl = (config: UrlFieldConfig, data: Partial<any>, useNestedDocs: boolean) => {
-  // Generate URL if `generateUrl` function is provided
-  const generatedUrl = typeof config.generateUrl === 'function' ? config.generateUrl(data) : ''
-
-  // Handle nested docs logic
-  if (useNestedDocs) {
-    const breadcrumbs = Array.isArray(data.breadcrumbs) ? data.breadcrumbs : []
-    const nestedUrl = breadcrumbs.reverse()[0]?.url || ''
-    return nestedUrl || generatedUrl
-  }
-
-  return generatedUrl
-}
-
-const resolveFinalUrl = ({
-  appendTo = 'none',
-  baseUrl,
-  defaultLocale,
-  locale,
-}: {
-  appendTo: AppendLocaleToUrlOptions | undefined
-  baseUrl: string
-  defaultLocale: string
-  locale: string
-}): string => {
-  switch (appendTo) {
-    case 'all':
-      return `/${locale}${baseUrl}`
-    case 'exclude-default':
-      return locale === defaultLocale ? baseUrl : `/${locale}${baseUrl}`
-    default:
-      return baseUrl
-  }
-}
