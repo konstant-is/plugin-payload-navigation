@@ -16,6 +16,7 @@ const incrementVersion = (currentVersion, releaseType) => {
 
 const updateVersion = (releaseType) => {
   const packageJsonPath = path.resolve(__dirname, '../package.json')
+  const distPath = path.resolve(__dirname, '../dist')
 
   try {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
@@ -24,6 +25,15 @@ const updateVersion = (releaseType) => {
 
     if (!newVersion) {
       throw new Error('Invalid release type. Use "patch", "minor", or "major".')
+    }
+
+    try {
+      execSync(`pnpm run build`)
+      execSync(`git add .`)
+      execSync(`git commit -m "chore(build): Build output for ${newVersion}"`)
+    } catch (e) {
+      console.log(e)
+      process.exit(1)
     }
 
     packageJson.version = newVersion
