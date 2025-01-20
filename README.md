@@ -2,7 +2,7 @@
 
 The `payload-plugin-navigation` is a powerful and flexible plugin for [Payload CMS](https://payloadcms.com/) that enables easy creation and management of structured, localized, and SEO-friendly navigation structures. Designed for multilingual and complex websites, this plugin simplifies the handling of dynamic navigation elements.
 
-#### Features
+### Features
 
 - Automatically generate and manage localized slugs and URLs with customizable options, including advanced slugify settings.
 
