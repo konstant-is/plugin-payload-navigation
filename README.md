@@ -2,27 +2,13 @@
 
 The `payload-plugin-navigation` is a powerful and flexible plugin for [Payload CMS](https://payloadcms.com/) that enables easy creation and management of structured, localized, and SEO-friendly navigation structures. Designed for multilingual and complex websites, this plugin simplifies the handling of dynamic navigation elements.
 
-## Features
+#### Features
 
-- **Localized Navigation**  
-  Build navigation menus tailored to multiple locales with seamless internationalization support.
+- Automatically generate and manage localized slugs and URLs with customizable options, including advanced slugify settings.
 
-- **Slug and URL Management**  
-  Automatically generate and manage slugs and URLs with customizable options, including advanced slugify settings.
+- Integrate with the [Nested Docs Plugin](https://github.com/payloadcms/plugin-nested-docs) for hierarchical navigation structures.
 
-- **Nested Navigation Support**  
-  Integrate with the [Nested Docs Plugin](https://github.com/payloadcms/plugin-nested-docs) for hierarchical navigation structures.
-
-- **Permalink Generation**  
-  Automatically resolve and display permalinks for referenced documents.
-
-- **Flexible Configuration**
-
-  - Append locales to URLs for all, none, or non-default locales.
-  - Configure slug generation with regex support, lowercase transformation, replacement characters, and strict modes.
-
-- **SEO Optimization**  
-  Helps create clean, structured URLs to enhance search engine visibility.
+- Automatically resolve and display permalinks for referenced documents.
 
 ## Installation
 
@@ -77,63 +63,32 @@ The `NavigationPlugin` provides a variety of configuration options to customize 
 
 Determines how locales are appended to generated URLs. This is useful for building multilingual navigation.
 
-#### Available Options
-
-- `'all'`: Append the locale to all URLs.
-- `'exclude-default'`: Append the locale to all URLs except those for the default locale.
-- `'none'`: Do not append the locale to any URLs.
-
-#### Default Value
-
-```typescript
-appendLocaleToUrl: 'exclude-default'
-```
+| Option            | Description                                                        | Default |
+| ----------------- | ------------------------------------------------------------------ | ------- |
+| `all`             | Append the locale to all URLs.                                     |         |
+| `exclude-default` | Append the locale to all URLs except those for the default locale. | **✓**   |
+| `none`            | Do not append the locale to any URLs.                              |         |
 
 ## `fallbackLocale`
 
-Specifies the locale to fall back on when no locale is explicitly provided. This is particularly useful for ensuring consistent behavior in multilingual setups when a specific locale is not available.
+Defines the default locale used when no locale is explicitly provided, ensuring consistent behavior in multilingual setups.
 
-### Available Options
+| **Type** | **Example**            | **Default** |
+| -------- | ---------------------- | ----------- |
+| string   | `'en'`, `'fr'`, `'es'` | `'en'`      |
 
-- Any valid locale string (e.g., `'en'`, `'fr'`, `'es'`).
+### `permalinkEnabled`
 
-#### Example
+Controls whether permalinks are generated for collections.
 
-If the `fallbackLocale` is set to `'en'` and a request is made without a specific locale, the navigation or content will default to using the English locale.
-
-#### Default Value
-
-```typescript
-fallbackLocale: 'en'
-```
-
-## `permalinkEnabled`
-
-Enables or disables the generation of permalinks for collections
-
-#### Available Options
-
-- `true`: Enable permalink generation.
-- `false`: Disable permalink generation
-
-#### Default Value
-
-```typescript
-permalinkEnabled: true
-```
+| **Option** | **Description**              | **Default** |
+| ---------- | ---------------------------- | ----------- |
+| `true`     | Enable permalink generation  | `true`      |
+| `false`    | Disable permalink generation |             |
 
 ## `nestedDocsPlugin`
 
-The `nestedDocsPlugin` configuration enables support for hierarchical document structures, integrating with the [Nested Docs Plugin](https://github.com/payloadcms/plugin-nested-docs). This is useful for creating and managing nested navigation structures such as page hierarchies.
-
-The `nestedDocsPlugin` configuration inherits all options from the [Nested Docs Plugin](https://payloadcms.com/docs/plugins/nested-docs#generateurl), except for the `collections` property, which is managed by the `Navigation Plugin`.
-
-#### Configuration
-
-The plugin does not enable nested document support by default. To use this feature, pass a configuration object for the `nestedDocsPlugin`.
-
-- If `nestedDocsPlugin` is not provided, the plugin assumes that documents are flat and independent, without hierarchy.
-- This feature is optional and can be omitted if nested navigation is not required.
+Enables support for hierarchical document structures using the [Nested Docs Plugin](https://github.com/payloadcms/plugin-nested-docs). Useful for creating nested navigation like page hierarchies.
 
 #### Example Usage
 
@@ -148,22 +103,18 @@ navigationPlugin({
 })
 ```
 
-## `slugifyOptions`
+### `slugifyOptions`
 
-The `slugifyOptions` setting allows you to define how slugs are generated from input text. These options include customizing character replacements, case sensitivity, and trimming behavior. The configuration leverages the capabilities of the [slugify](https://www.npmjs.com/package/slugify) package to ensure clean, SEO-friendly slugs.
+Defines how slugs are generated from input text, using the [slugify](https://www.npmjs.com/package/slugify) package. This setting customizes character replacements, case sensitivity, and trimming behavior to produce clean, SEO-friendly slugs.
 
-#### Default Configuration
-
-```typescript
-{
-  locale: 'en',
-  lower: true, // Converts text to lowercase
-  remove: /[*+~.()'"!:@]/g, // Removes specified characters
-  replacement: '-', // Replaces spaces and removed characters with this value
-  strict: false, // If true, removes non-alphanumeric characters
-  trim: true, // Trims leading and trailing separator characters
-}
-```
+| **Option**    | **Description**                                          | **Default**        |
+| ------------- | -------------------------------------------------------- | ------------------ |
+| `locale`      | Locale used for slug generation.                         | `'en'`             |
+| `lower`       | Converts text to lowercase.                              | `true`             |
+| `remove`      | Regex pattern for characters to remove.                  | `/[*+~.()'"!:@]/g` |
+| `replacement` | Replacement character for spaces and removed characters. | `'-'`              |
+| `strict`      | Removes non-alphanumeric characters if set to `true`.    | `false`            |
+| `trim`        | Trims leading and trailing separators.                   | `true`             |
 
 ## `fields`
 
@@ -171,7 +122,7 @@ The `fields` configuration allows you to define the behavior and properties of f
 
 #### `slug`
 
-The `slug` field stores a URL-friendly string derived from other fields, typically the `title`.
+The `slug` field stores a URL-friendly string derived from other fields.
 
 | Field         | Type     | Default    | Description                                              |
 | ------------- | -------- | ---------- | -------------------------------------------------------- |
@@ -181,13 +132,13 @@ The `slug` field stores a URL-friendly string derived from other fields, typical
 
 ### `url`
 
-The url field stores the generated URL for the document. It is often derived from the slug and can optionally include locale prefixes.
+The `url` field stores the generated URL for the document and can optionally include locale prefixes based on the `appendLocaleToUrl` configuration.
 
-| Field       | Type     | Default   | Description                                                       |
-| ----------- | -------- | --------- | ----------------------------------------------------------------- |
-| fieldName   | string   | "url"     | The name of the field                                             |
-| sourceField | string   | "slug"    | Field name to use for generating the url                          |
-| generateUrl | function | undefined | A function that generates a custom URL based on the document data |
+| **Field**     | **Type**   | **Default** | **Description**                                            |
+| ------------- | ---------- | ----------- | ---------------------------------------------------------- |
+| `fieldName`   | `string`   | `"url"`     | The name of the field where the URL is stored.             |
+| `sourceField` | `string`   | `"slug"`    | Field name used as the source for generating the URL.      |
+| `generateUrl` | `function` | `undefined` | A custom function to generate URLs based on document data. |
 
 ### `localizedSlug`
 
