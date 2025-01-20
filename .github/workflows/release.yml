@@ -46,8 +46,9 @@ jobs:
           cp -R .github release
           cp -R dist release
 
-          # Delete all root files exept release folder
-          find . -mindepth 1 -maxdepth 1 ! -name 'release' -exec rm -rf {} +
+
+          # Delete all files and folders except `.git` and `release`
+          find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'release' -exec rm -rf {} +
 
            # Copy release files back to the root and clean release folder
           cp -R release/* .
