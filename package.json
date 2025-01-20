@@ -1,6 +1,6 @@
 {
   "name": "@konstant/payload-plugin-navigation",
-  "version": "1.0.0",
+  "version": "0.0.5",
   "description": "A blank template to get started with Payload 3.0",
   "license": "MIT",
   "type": "module",
@@ -39,7 +39,10 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "prepublishOnly": "pnpm clean && pnpm build",
-    "test": "jest"
+    "test": "jest",
+    "ci:version-patch": "node scripts/ci-version.js patch",
+    "ci:tag": "node scripts/tag.js",
+    "ci:tag-minor": "pnpm ci:version-patch && pnpm ci:tag"
   },
   "dependencies": {
     "@payloadcms/plugin-nested-docs": "3.14.0",
@@ -61,10 +64,12 @@
     "@types/node": "^22.5.4",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.1",
+    "child_process": "^1.0.2",
     "copyfiles": "2.4.1",
     "cross-env": "^7.0.3",
     "eslint": "^9.16.0",
     "eslint-config-next": "15.1.0",
+    "fs": "0.0.1-security",
     "graphql": "^16.8.1",
     "jest": "29.7.0",
     "mongodb-memory-server": "^10.1.2",
@@ -76,9 +81,11 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "rimraf": "^6.0.1",
+    "semver": "^7.6.3",
     "sharp": "0.32.6",
     "sort-package-json": "^2.10.0",
-    "typescript": "5.7.2"
+    "typescript": "5.7.2",
+    "url": "^0.11.4"
   },
   "peerDependencies": {
     "payload": "3.14.0"
