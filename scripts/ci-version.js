@@ -31,7 +31,7 @@ const updateVersion = (releaseType) => {
 
     try {
       execSync(`pnpm run build`)
-      execSync(`git add .`)
+      execSync(`git add ${distPath}`)
       execSync(`git commit -m "chore(build): Build output for ${newVersion}"`)
     } catch (e) {
       console.log(e)

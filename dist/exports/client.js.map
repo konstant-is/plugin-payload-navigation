@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/exports/client.ts"],"sourcesContent":["export { PermalinkField } from '../components/PermalinkField.js'\nexport { SlugFieldClient } from '../components/SlugFieldClient.js'\n"],"names":["PermalinkField","SlugFieldClient"],"mappings":"AAAA,SAASA,cAAc,QAAQ,kCAAiC;AAChE,SAASC,eAAe,QAAQ,mCAAkC"}
