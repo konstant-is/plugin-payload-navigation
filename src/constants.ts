@@ -8,8 +8,6 @@ import type {
   UrlFieldConfig,
 } from './types.js'
 
-export const PLUGIN_PATH = 'payload-plugin-navigation'
-
 export const defaultSlugify: Required<SlugifyOptions> = {
   locale: 'en',
   lower: true,

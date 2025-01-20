@@ -1,4 +1,4 @@
-import { PLUGIN_PATH } from '../constants.js'
+const PLUGIN_PATH = '@konstant/payload-plugin-navigation'
 
 type PathType = 'client' | 'rsc'
 
