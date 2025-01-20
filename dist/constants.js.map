@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/constants.ts"],"sourcesContent":["export const PLUGIN_PATH = 'payload-plugin-navigation'\nexport const DEFAULT_LOCALE = 'en'\n"],"names":["PLUGIN_PATH","DEFAULT_LOCALE"],"mappings":"AAAA,OAAO,MAAMA,cAAc,4BAA2B;AACtD,OAAO,MAAMC,iBAAiB,KAAI"}

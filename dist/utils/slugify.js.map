@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/utils/slugify.ts"],"sourcesContent":["/**\n * Hack to make 'slugify' import work with \"type\": \"module\".\n */\nimport s from 'slugify'\n\nexport const slugify = s.default || s\n"],"names":["s","slugify","default"],"mappings":"AAAA;;CAEC,GACD,OAAOA,OAAO,UAAS;AAEvB,OAAO,MAAMC,UAAUD,EAAEE,OAAO,IAAIF,EAAC"}

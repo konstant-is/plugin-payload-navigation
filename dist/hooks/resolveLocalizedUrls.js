@@ -1,0 +1,29 @@
+import { DEFAULT_LOCALE } from '../constants.js';
+export const resolveLocalizedUrl = (config)=>({ data, operation, req })=>{
+        const { locale, payload } = req;
+        const { defaultLocale = DEFAULT_LOCALE } = payload.config.localization || {};
+        const currentLocale = locale || defaultLocale || 'en';
+        if (operation === 'create') {
+            return data;
+        }
+        const sourceField = config.sourceField ? data[config.sourceField] : undefined;
+        if (!sourceField) {
+            payload.logger.error(`Error: Missing source field "${config.sourceField}" while resolving localized url.`);
+            return data;
+        }
+        const field = data[config.fieldName] || {};
+        if (typeof field !== 'object') {
+            payload.logger.error(`Error: Localized url field "${config.fieldName}" is not an object.`);
+            return data;
+        }
+        const updated = {
+            ...field,
+            [currentLocale]: sourceField
+        };
+        return {
+            ...data,
+            [config.fieldName]: updated
+        };
+    };
+
+//# sourceMappingURL=resolveLocalizedUrls.js.map
