@@ -154,7 +154,7 @@ The `slugifyOptions` setting allows you to define how slugs are generated from i
 
 #### Default Configuration
 
-````typescript
+```typescript
 {
   locale: 'en',
   lower: true, // Converts text to lowercase
@@ -169,27 +169,36 @@ The `slugifyOptions` setting allows you to define how slugs are generated from i
 
 The `fields` configuration allows you to define the behavior and properties of fields added by the plugin. These fields handle slugs, URLs, and other navigation-related properties.
 
-### Available Fields
-
 #### `slug`
 
-- **Description**: The `slug` field stores a URL-friendly string derived from other fields, typically the `title`.
-- **Options**:
-  - `fieldName` (string): Name of the field where the slug is stored.
-  - `lockFieldName` (string): Name of the field to lock the slug from further updates.
-  - `useFields` (string[]): Array of field names to use for generating the slug.
-- **Default Configuration**:
-  ```typescript
-  slug: {
-    fieldName: 'slug',
-    lockFieldName: 'slugLock',
-    useFields: ['title'],
-  }
-````
+The `slug` field stores a URL-friendly string derived from other fields, typically the `title`.
 
-````
+| Field         | Type     | Default  | Description                                              |
+| ------------- | -------- | -------- | -------------------------------------------------------- |
+| fieldName     | string   | slug     | Name of the field where the slug is stored.              |
+| lockFieldName | string   | slugLock | Name of the field to lock the slug from further updates. |
+| useFields     | string[] | [title]  | Array of field names to use for generating the slug.     |
 
+### `url`
+
+The url field stores the generated URL for the document. It is often derived from the slug and can optionally include locale prefixes.
+
+#### Options
+
+- `fieldName` (string): The name of the field where the URL is stored.
+- `sourceField` (string): Field name to use for generating the slug.
+- `generateUrl` (function): A function that generates a custom URL based on the document data.
+
+#### Default Configuration
+
+```typescript
+url: {
+  fieldName: 'url',
+  sourceField: 'slug'
+  generateUrl: undefined
+}
 ```
 
-```
-````
+### `localizedSlug`
+
+### `localizedUrl`
