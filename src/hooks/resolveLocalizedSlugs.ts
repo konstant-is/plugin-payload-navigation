@@ -1,34 +1,38 @@
 import type { CollectionBeforeChangeHook } from 'payload'
 
-import type { LocalizedSlugFieldConfig } from '../types.js'
-
-import { defaultValues } from '../constants.js'
+import type { PluginContext } from '../utils/createPluginContext.js'
 
 export const resolveLocalizedSlugs =
-  (config: LocalizedSlugFieldConfig): CollectionBeforeChangeHook =>
+  (context: PluginContext): CollectionBeforeChangeHook =>
   ({ data, operation, req }) => {
     const { locale, payload } = req
-    const { defaultLocale = defaultValues.locale } = payload.config.localization || {}
+    const { defaultLocale = context.fallbackLocale } = payload.config.localization || {}
     const currentLocale = locale || defaultLocale
 
+    const { localizedSlugFieldConfig } = context.fieldConfigs
     if (operation === 'create') {
       return data
     }
 
     // Fetch source field value
-    const sourceField = config.sourceField ? data[config.sourceField] : undefined
+    const sourceField = localizedSlugFieldConfig.sourceField
+      ? data[localizedSlugFieldConfig.sourceField]
+      : undefined
+
     if (!sourceField) {
       payload.logger.error(
-        `Error: Missing source field "${config.sourceField}" while populating localized slugs.`,
+        `Error: Missing source field "${localizedSlugFieldConfig.sourceField}" while populating localized slugs.`,
       )
 
       return data
     }
 
     // Fetch or initialize the localized slugs field
-    const localizedSlugField = data[config.fieldName] || {}
+    const localizedSlugField = data[localizedSlugFieldConfig.fieldName] || {}
     if (typeof localizedSlugField !== 'object') {
-      payload.logger.error(`Error: Localized slugs field "${config.fieldName}" is not an object.`)
+      payload.logger.error(
+        `Error: Localized slugs field "${localizedSlugFieldConfig.fieldName}" is not an object.`,
+      )
       return data
     }
 
@@ -38,13 +42,8 @@ export const resolveLocalizedSlugs =
       [currentLocale]: sourceField,
     }
 
-    // Log successful operation
-    payload.logger.info(
-      `Localized slug updated for locale "${currentLocale}" in field "${config.fieldName}".`,
-    )
-
     return {
       ...data,
-      [config.fieldName]: updatedLocalizedField,
+      [localizedSlugFieldConfig.fieldName]: updatedLocalizedField,
     }
   }

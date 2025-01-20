@@ -4,10 +4,9 @@ import type { CreatePluginField, PermalinkFieldConfig } from '../types.js'
 
 import { getPluginPath } from '../utils/getPluginPath.js'
 
-export const createPermalinkField: CreatePluginField<PermalinkFieldConfig, Field> = (
-  pluginConfig,
+export const createPermalinkField: CreatePluginField<PermalinkFieldConfig, Field> = ({
   fieldConfig,
-): Field => {
+}): Field => {
   return {
     name: fieldConfig.fieldName,
     type: 'ui',

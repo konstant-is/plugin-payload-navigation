@@ -40,10 +40,9 @@ export const validateSlug =
     return processedSlug
   }
 
-export const createSlugField: CreatePluginField<SlugFieldConfig, Field[]> = (
-  pluginConfig,
+export const createSlugField: CreatePluginField<SlugFieldConfig, Field[]> = ({
   fieldConfig,
-): Field[] => {
+}): Field[] => {
   const { useFields = ['title'] } = fieldConfig
 
   const { remove, ...slugifyRest } = fieldConfig.slugify

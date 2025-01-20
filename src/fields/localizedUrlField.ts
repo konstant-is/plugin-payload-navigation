@@ -1,16 +1,19 @@
 import type { Field } from 'payload'
 
-import type { LocalizedUrlFieldConfig } from '../types.js'
+import type { CreatePluginField, LocalizedUrlFieldConfig } from '../types.js'
 
-export const createLocalizedUrlField = (config: LocalizedUrlFieldConfig): Field => {
+export const createLocalizedUrlField: CreatePluginField<LocalizedUrlFieldConfig, Field> = ({
+  context,
+  fieldConfig,
+}) => {
   return {
-    name: config.fieldName,
+    name: fieldConfig.fieldName,
     type: 'group',
     admin: {
       description: 'Automatically generated localized urls.',
       readOnly: true,
     },
-    fields: config.locales.map((locale) => ({
+    fields: context.locales.map((locale) => ({
       name: locale,
       type: 'text',
       defaultValue: '',

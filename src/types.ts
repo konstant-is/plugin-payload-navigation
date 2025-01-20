@@ -1,10 +1,13 @@
 import type { NestedDocsPluginConfig } from '@payloadcms/plugin-nested-docs/types'
 import type { CollectionSlug } from 'payload'
 
+import type { PluginContext } from './utils/createPluginContext.js'
+
 export type AppendLocaleToUrlOptions = 'all' | 'exclude-default' | 'none'
-export type SlugFormat = (value: null | string | undefined) => null | string | undefined
 
 export type NavigationPluginConfig = {
+  appendLocaleToUrl?: AppendLocaleToUrlOptions
+
   /**
    * Collections this plugin should extend. If you need different configs for different collections, this plugin can be added to your config more than once with different collections.
    */
@@ -27,11 +30,9 @@ export type NavigationPluginConfig = {
   /**
    * Options for handling URL generation.
    */
-  options?: {
-    appendLocaleToUrl?: AppendLocaleToUrlOptions
-    formatSlug?: SlugFormat
-    usePermalink?: boolean
-  }
+
+  permalinkEnabled?: boolean
+  slugifyOptions?: SlugifyOptions
 }
 
 // Base configuration type for fields
@@ -39,11 +40,6 @@ type BaseFieldConfig = {
   fieldName: string // Name of the field
   sourceField?: string // Optional source field for some configurations
 }
-
-// Common configuration for localized fields
-type LocalizedFieldConfig = {
-  locales: string[] // Locales for localization
-} & BaseFieldConfig
 
 // Provides additional options for the slugify function
 export type SlugifyOptions = {
@@ -56,10 +52,10 @@ export type SlugifyOptions = {
 }
 
 // Configuration for localized slug fields
-export type LocalizedSlugFieldConfig = LocalizedFieldConfig
+export type LocalizedSlugFieldConfig = BaseFieldConfig
 
 // Configuration for localized URL fields
-export type LocalizedUrlFieldConfig = LocalizedFieldConfig
+export type LocalizedUrlFieldConfig = BaseFieldConfig
 
 // Configuration for regular slug fields
 export type SlugFieldConfig = {
@@ -79,5 +75,6 @@ export type UrlFieldConfig = {
 // Configuration for permalink fields
 export type PermalinkFieldConfig = BaseFieldConfig
 
-export type CreatePluginField<T, R> = (pluginConfig: NavigationPluginConfig, fieldConfig: T) => R
+export type CreatePluginField<T, R> = (params: { context: PluginContext; fieldConfig: T }) => R
+
 export type CreateFieldConfig<T> = (config: Partial<T>, defaults: T) => T

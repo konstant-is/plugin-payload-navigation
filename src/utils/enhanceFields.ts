@@ -1,6 +1,6 @@
 import type { Field } from 'payload'
 
-import type { NavigationPluginConfig } from '../types.js'
+import type { PluginContext } from './createPluginContext.js'
 
 import {
   createLocalizedSlugsField,
@@ -9,28 +9,9 @@ import {
   createSlugField,
   createUrlField,
 } from '../fields/index.js'
-import { createFieldConfigs } from './createFieldConfigs.js'
 
-export const enhanceFields = ({
-  fields,
-  locales,
-  pluginConfig,
-}: {
-  fields: Field[]
-  locales: string[]
-  pluginConfig: NavigationPluginConfig
-}) => {
-  // Generate configurations
-  const {
-    localizedSlugFieldConfig,
-    localizedUrlFieldConfig,
-    permalinkFieldConfig,
-    slugFieldConfig,
-    urlFieldConfig,
-  } = createFieldConfigs(pluginConfig, locales)
-
+export const enhanceFields = ({ context, fields }: { context: PluginContext; fields: Field[] }) => {
   let updatedFields = [...fields] // Start with a copy of the existing fields
-  const usePermalink = pluginConfig.options?.usePermalink || true
 
   // Create index for fast lookups
   const indexedFields = fields.reduce(
@@ -56,43 +37,46 @@ export const enhanceFields = ({
     })
   }
 
+  const {
+    localizedSlugFieldConfig,
+    localizedUrlFieldConfig,
+    permalinkFieldConfig,
+    slugFieldConfig,
+    urlFieldConfig,
+  } = context.fieldConfigs
+
   // Add slug fields
   if (!indexedFields[slugFieldConfig.fieldName]) {
-    const slugFields = createSlugField(pluginConfig, slugFieldConfig)
+    const slugFields = createSlugField({ context, fieldConfig: slugFieldConfig })
     addFields(slugFields) // Handles multiple slug-related fields
   }
 
   // Add localized slug fields
   if (!indexedFields[localizedSlugFieldConfig.fieldName]) {
-    const localizedField = createLocalizedSlugsField(localizedSlugFieldConfig)
+    const localizedField = createLocalizedSlugsField({
+      context,
+      fieldConfig: localizedSlugFieldConfig,
+    })
     addFields([localizedField])
   }
 
   // Add URL fields
   if (!indexedFields[urlFieldConfig.fieldName]) {
-    const field = createUrlField(pluginConfig, urlFieldConfig)
+    const field = createUrlField({ context, fieldConfig: urlFieldConfig })
     addFields([field])
   }
 
   // Add Localized URL field
   if (!indexedFields[localizedUrlFieldConfig.fieldName]) {
-    const field = createLocalizedUrlField(localizedUrlFieldConfig)
+    const field = createLocalizedUrlField({ context, fieldConfig: localizedUrlFieldConfig })
     addFields([field])
   }
 
-  if (usePermalink && !indexedFields[permalinkFieldConfig.fieldName]) {
-    const field = createPermalinkField(pluginConfig, permalinkFieldConfig)
+  if (context.permalinkEnabled && !indexedFields[permalinkFieldConfig.fieldName]) {
+    const field = createPermalinkField({ context, fieldConfig: permalinkFieldConfig })
 
     updatedFields = [field, ...updatedFields]
   }
 
-  return {
-    configs: {
-      localizedSlugFieldConfig,
-      localizedUrlFieldConfig,
-      slugFieldConfig,
-      urlFieldConfig,
-    },
-    fields: updatedFields,
-  }
+  return updatedFields
 }

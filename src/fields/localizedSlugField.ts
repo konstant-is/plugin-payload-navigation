@@ -1,15 +1,18 @@
 import type { Field } from 'payload'
 
-import type { LocalizedSlugFieldConfig } from '../types.js'
+import type { CreatePluginField, LocalizedSlugFieldConfig } from '../types.js'
 
-export const createLocalizedSlugsField = (config: LocalizedSlugFieldConfig): Field => ({
-  name: config.fieldName,
+export const createLocalizedSlugsField: CreatePluginField<LocalizedSlugFieldConfig, Field> = ({
+  context,
+  fieldConfig,
+}): Field => ({
+  name: fieldConfig.fieldName,
   type: 'group',
   admin: {
     description: 'Automatically generated localized slugs.',
     readOnly: true,
   },
-  fields: config.locales.map((locale) => ({
+  fields: context.locales.map((locale) => ({
     name: locale,
     type: 'text',
     defaultValue: '',
