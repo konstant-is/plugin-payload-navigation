@@ -10,23 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22' # Replace with your desired Node.js version
+          node-version: '16' # Replace with the version of Node.js you need
 
+      # Step 3: Set up pnpm
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: '8' # Specify the version of pnpm you want to use
+
+      # Step 4: Install dependencies using pnpm
       - name: Install Dependencies
         run: pnpm install
 
+      # Step 5: Run build command using pnpm
       - name: Build Project
-        run: pnpm run build # Replace with your build command
+        run: pnpm run build # Replace with your build script
 
-      - name: Publish Artifacts (Optional)
+      # Step 6: Publish artifacts (optional)
+      - name: Publish Build Artifacts
         if: success()
         uses: actions/upload-artifact@v3
         with:
           name: build-artifacts
-          path: ./build # Replace with the path to your build output
+          path: ./dist # Replace with the path to your build output
