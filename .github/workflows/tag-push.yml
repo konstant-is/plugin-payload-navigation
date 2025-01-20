@@ -46,9 +46,10 @@ jobs:
         run: ls -R . # Debugging step to confirm correct files remain
 
       # Step 7: Publish artifacts
-      - name: Publish Build Artifacts
-        if: success()
+      - name: Archive
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: ./ # Path to remaining files (dist and package.json)
+          path: |
+            dist
+            package.json
