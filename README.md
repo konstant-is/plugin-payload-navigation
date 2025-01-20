@@ -5,9 +5,7 @@ The `payload-plugin-navigation` is a powerful and flexible plugin for [Payload C
 ### Features
 
 - Automatically generate and manage localized slugs and URLs with customizable options, including advanced slugify settings.
-
 - Integrate with the [Nested Docs Plugin](https://github.com/payloadcms/plugin-nested-docs) for hierarchical navigation structures.
-
 - Automatically resolve and display permalinks for referenced documents.
 
 ## Installation
