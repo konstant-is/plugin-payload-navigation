@@ -1,0 +1,60 @@
+name: Update Versioned Release Branch on Tag
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+' # Matches semantic versioning tags (e.g., v1.0.0)
+
+env:
+  NODE_VERSION: 22.6.0
+  PNPM_VERSION: 9.7.1
+
+jobs:
+  update-versioned-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Node setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          pnpm-version: ${{ env.PNPM_VERSION }}
+          pnpm-run-install: true
+          # pnpm-install-cache-key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      # Step 4: Build the project
+      - name: Build Project
+        run: pnpm build
+
+      # Step 5: Create Versioned Release Branch
+      - name: Prepare Versioned Release Branch
+        env:
+          TAG_NAME: ${{ github.ref_name }} # Extracts the tag name (e.g., v1.0.0)
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          # Extract version from tag name and create release branch
+          RELEASE_BRANCH="release-${TAG_NAME}"
+          git checkout -B $RELEASE_BRANCH
+
+          # Remove unnecessary files/folders (optional)
+          rm -rf src dev tests
+
+          # Commit changes for the release branch
+          git add .
+          git commit -m "chore(release): prepare ${TAG_NAME} for release"
+          git push origin $RELEASE_BRANCH --force
+
+      # Step 6: Push the tag to the release branch
+      - name: Push Tag to Release Branch
+        env:
+          TAG_NAME: ${{ github.ref_name }} # Extracts the tag name (e.g., v1.0.0)
+        run: |
+          git tag -f $TAG_NAME release-${TAG_NAME}
+          git push origin $TAG_NAME --force

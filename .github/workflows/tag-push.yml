@@ -16,41 +16,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      # Step 2: Set up Node.js
-      - name: Node setup
-        uses: ./.github/actions/setup
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          pnpm-version: ${{ env.PNPM_VERSION }}
-          pnpm-install-cache-key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-      # Step 3: Install dependencies
-      - name: Install Dependencies
-        run: pnpm install
-
-      # Step 4: Run the build process
-      - name: Build Project
-        run: pnpm run build # Replace with your build script
-
-      # Step 5: Prepare Artifact Directory
-      - name: Prepare Release Folder
-        run: |
-          mkdir release
-          cp -r dist release/
-          cp package-build.json release/package.json
-          echo "Prepared release folder with dist and package.json"
-
-        # Step 6: Verify Release Folder
       - name: Verify Release Folder
-        run: ls -la release
+        run: ls
+      # # Step 1: Checkout the repository
+      # - name: Checkout Code
+      #   uses: actions/checkout@v4
 
-      # Step 7: Publish artifacts
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-artifact
-          path: release
+      # # Step 2: Set up Node.js
+      # - name: Node setup
+      #   uses: ./.github/actions/setup
+      #   with:
+      #     node-version: ${{ env.NODE_VERSION }}
+      #     pnpm-version: ${{ env.PNPM_VERSION }}
+      #     pnpm-install-cache-key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      # # Step 3: Install dependencies
+      # - name: Install Dependencies
+      #   run: pnpm install
+
+      # # Step 4: Run the build process
+      # - name: Build Project
+      #   run: pnpm run build # Replace with your build script
+
+      # # Step 5: Prepare Artifact Directory
+      # - name: Prepare Release Folder
+      #   run: |
+      #     mkdir release
+      #     cp -r dist release/
+      #     cp package-build.json release/package.json
+      #     echo "Prepared release folder with dist and package.json"
+
+      #   # Step 6: Verify Release Folder
+      # - name: Verify Release Folder
+      #   run: ls -la release
+
+      # # Step 7: Publish artifacts
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: release-artifact
+      #     path: release
