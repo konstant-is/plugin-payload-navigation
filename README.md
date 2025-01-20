@@ -150,53 +150,18 @@ navigationPlugin({
 
 ### `slugifyOptions`
 
-#### Description
-
-The `slugifyOptions` configuration allows you to customize the behavior of the slug generation process. These options are passed to the `slugify` utility to transform field values into SEO-friendly slugs.
-
-#### Available Options
-
-- **`locale`**: The locale to use for specific transformations (e.g., replacing certain characters).
-
-  - **Type**: `string`
-  - **Default**: `'en'`
-  - **Example**: `'is'`
-
-- **`lower`**: Converts the slug to lowercase.
-
-  - **Type**: `boolean`
-  - **Default**: `true`
-
-- **`remove`**: A regular expression or string pattern to remove specific characters from the slug.
-
-  - **Type**: `RegExp`
-  - **Default**: `/[*+~.()'"!:@]/g`
-  - **Example**: `/[^\w]/g` to remove all non-alphanumeric characters.
-
-- **`replacement`**: The character used to replace spaces and other separators.
-
-  - **Type**: `string`
-  - **Default**: `'-'`
-
-- **`strict`**: Ensures the slug only contains alphanumeric characters and separators.
-
-  - **Type**: `boolean`
-  - **Default**: `false`
-
-- **`trim`**: Removes leading and trailing separators from the slug.
-  - **Type**: `boolean`
-  - **Default**: `true`
+The `slugifyOptions` setting allows you to define how slugs are generated from input text. These options include customizing character replacements, case sensitivity, and trimming behavior. The configuration leverages the capabilities of the [slugify](https://www.npmjs.com/package/slugify) package to ensure clean, SEO-friendly slugs.
 
 #### Default Configuration
 
-```typescript
+````typescript
 {
   locale: 'en',
-  lower: true,
-  remove: /[*+~.()'"!:@]/g,
-  replacement: '-',
-  strict: false,
-  trim: true,
+  lower: true, // Converts text to lowercase
+  remove: /[*+~.()'"!:@]/g, // Removes specified characters
+  replacement: '-', // Replaces spaces and removed characters with this value
+  strict: false, // If true, removes non-alphanumeric characters
+  trim: true, // Trims leading and trailing separator characters
 }
 ```
 
@@ -220,7 +185,7 @@ The `fields` configuration allows you to define the behavior and properties of f
     lockFieldName: 'slugLock',
     useFields: ['title'],
   }
-  ```
+````
 
 ````
 
