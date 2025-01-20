@@ -179,26 +179,16 @@ The `slug` field stores a URL-friendly string derived from other fields, typical
 | lockFieldName | string   | "slugLock" | Name of the field to lock the slug from further updates. |
 | useFields     | string[] | ["title"]  | Array of field names to use for generating the slug.     |
 
-<!-- ### `url`
+### `url`
 
 The url field stores the generated URL for the document. It is often derived from the slug and can optionally include locale prefixes.
 
-#### Options
+| Field       | Type     | Default   | Description                                                       |
+| ----------- | -------- | --------- | ----------------------------------------------------------------- |
+| fieldName   | string   | "url"     | The name of the field                                             |
+| sourceField | string   | "slug"    | Field name to use for generating the url                          |
+| generateUrl | function | undefined | A function that generates a custom URL based on the document data |
 
-- `fieldName` (string): The name of the field where the URL is stored.
-- `sourceField` (string): Field name to use for generating the slug.
-- `generateUrl` (function): A function that generates a custom URL based on the document data.
+<!-- ### `localizedSlug` -->
 
-#### Default Configuration
-
-```typescript
-url: {
-  fieldName: 'url',
-  sourceField: 'slug'
-  generateUrl: undefined
-}
-```
-
-### `localizedSlug`
-
-### `localizedUrl` -->
+<!-- ### `localizedUrl` -->
