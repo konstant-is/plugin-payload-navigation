@@ -7,12 +7,12 @@ export type AppendLocaleToUrlOptions = 'all' | 'exclude-default' | 'none'
 
 export type NavigationPluginConfig = {
   appendLocaleToUrl?: AppendLocaleToUrlOptions
-
   /**
    * Collections this plugin should extend. If you need different configs for different collections, this plugin can be added to your config more than once with different collections.
    */
   collections: CollectionSlug[]
   disabled?: boolean
+  fallbackLocale?: string
   /**
    * Configuration for slug and URL fields.
    */

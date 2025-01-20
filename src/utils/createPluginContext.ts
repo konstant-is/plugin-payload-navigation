@@ -52,7 +52,7 @@ export const createPluginContext = (
   return {
     appendLocaleToUrl: pluginConfig.appendLocaleToUrl || defaultValues.appendLocaleToUrl,
     collections: pluginConfig.collections,
-    fallbackLocale: defaultValues.fallbackLocale,
+    fallbackLocale: pluginConfig.appendLocaleToUrl || defaultValues.fallbackLocale,
     fieldConfigs: {
       localizedSlugFieldConfig,
       localizedUrlFieldConfig,
