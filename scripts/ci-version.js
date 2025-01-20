@@ -16,12 +16,11 @@ const incrementVersion = (currentVersion, releaseType) => {
 
 const updateVersion = (releaseType) => {
   const packageJsonPath = path.resolve(__dirname, '../package.json')
-  const distPath = path.resolve(__dirname, '../dist')
-
-  console.log(distPath)
+  const buildTemplatePath = path.resolve(__dirname, '../package-build.json')
 
   try {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+    const buildTemplate = JSON.parse(fs.readFileSync(buildTemplatePath, 'utf8'))
 
     const newVersion = incrementVersion(packageJson.version, releaseType)
 
@@ -29,21 +28,15 @@ const updateVersion = (releaseType) => {
       throw new Error('Invalid release type. Use "patch", "minor", or "major".')
     }
 
-    try {
-      execSync(`pnpm run build`)
-      execSync(`git add ${distPath}`)
-      execSync(`git commit -m "chore(build): Build output for ${newVersion}"`)
-    } catch (e) {
-      console.log(e)
-      process.exit(1)
-    }
-
     packageJson.version = newVersion
+    buildTemplate.version = newVersion
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n', 'utf8')
+    fs.writeFileSync(buildTemplatePath, JSON.stringify(buildTemplate, null, 2) + '\n', 'utf8')
 
     // Commit the changes to Git
     execSync(`git add ${packageJsonPath}`)
+    execSync(`git add ${buildTemplatePath}`)
     execSync(`git commit -m "chore(version): bump version to ${newVersion}"`)
     execSync(`git push origin main`)
 
