@@ -148,7 +148,7 @@ navigationPlugin({
 })
 ```
 
-### `slugifyOptions`
+## `slugifyOptions`
 
 The `slugifyOptions` setting allows you to define how slugs are generated from input text. These options include customizing character replacements, case sensitivity, and trimming behavior. The configuration leverages the capabilities of the [slugify](https://www.npmjs.com/package/slugify) package to ensure clean, SEO-friendly slugs.
 
