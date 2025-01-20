@@ -10,6 +10,11 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./client": {
+      "import": "./dist/exports/client.ts",
+      "types": "./dist/exports/client.ts",
+      "default": "./dist/exports/client.ts"
+    },
     "./types": {
       "import": "./dist/exports/types.js",
       "types": "./dist/exports/types.d.ts",
