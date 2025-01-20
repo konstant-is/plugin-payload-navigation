@@ -1,0 +1,42 @@
+{
+  "name": "@konstant/payload-plugin-navigation",
+  "version": "0.0.21",
+  "description": "Navigation plugin for Payload",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./types": {
+      "import": "./dist/exports/types.js",
+      "types": "./dist/exports/types.d.ts",
+      "default": "./dist/exports/types.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@payloadcms/eslint-config": "3.9.0",
+    "@payloadcms/plugin-nested-docs": "3.14.0",
+    "payload": "3.14.0",
+    "slugify": "^1.6.6"
+  },
+  "peerDependencies": {
+    "payload": "3.14.0"
+  },
+  "scripts": {
+    "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
+    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "clean": "rimraf -g {dist,*.tsbuildinfo}",
+    "copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  }
+}

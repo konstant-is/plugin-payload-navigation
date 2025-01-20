@@ -1,7 +1,7 @@
 {
   "name": "@konstant/payload-plugin-navigation",
-  "version": "0.0.20",
-  "description": "A blank template to get started with Payload 3.0",
+  "version": "0.0.21",
+  "description": "Navigation plugin for Payload",
   "license": "MIT",
   "type": "module",
   "exports": {
