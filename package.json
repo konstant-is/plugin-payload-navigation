@@ -1,9 +1,29 @@
 {
   "name": "@konstant/payload-plugin-navigation",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "Navigation plugin for Payload",
   "license": "MIT",
   "type": "module",
+  "scripts": {
+    "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
+    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
+    "build:types": "tsc --outDir dist --rootDir ./src",
+    "clean": "rimraf {dist,*.tsbuildinfo}",
+    "copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
+    "dev": "payload run ./dev/server.ts",
+    "dev:generate-importmap": "pnpm dev:payload generate:importmap",
+    "dev:generate-types": "pnpm dev:payload generate:types",
+    "dev:payload": "cross-env PAYLOAD_CONFIG_PATH=./dev/payload.config.ts payload",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "prepublishOnly": "pnpm clean && pnpm build",
+    "test": "jest",
+    "ci:version": "node scripts/ci-version.js",
+    "ci:tag": "node scripts/tag.js",
+    "ci:tag-patch": "pnpm ci:version-patch && pnpm ci:tag",
+    "ci:tag-minor": "pnpm ci:version-minor && pnpm ci:tag",
+    "ci:tag-major": "pnpm ci:version-major && pnpm ci:tag"
+  },
   "exports": {
     ".": {
       "import": "./src/index.ts",
@@ -26,24 +46,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
-    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
-    "build:types": "tsc --outDir dist --rootDir ./src",
-    "clean": "rimraf {dist,*.tsbuildinfo}",
-    "copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
-    "dev": "payload run ./dev/server.ts",
-    "dev:generate-importmap": "pnpm dev:payload generate:importmap",
-    "dev:generate-types": "pnpm dev:payload generate:types",
-    "dev:payload": "cross-env PAYLOAD_CONFIG_PATH=./dev/payload.config.ts payload",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
-    "prepublishOnly": "pnpm clean && pnpm build",
-    "test": "jest",
-    "ci:version-patch": "node scripts/ci-version.js patch",
-    "ci:tag": "node scripts/tag.js",
-    "ci:tag-minor": "pnpm ci:version-patch && pnpm ci:tag"
-  },
   "dependencies": {
     "@payloadcms/plugin-nested-docs": "3.18.0",
     "slugify": "^1.6.6"
