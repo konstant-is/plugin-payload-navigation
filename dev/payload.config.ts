@@ -50,7 +50,7 @@ export default buildConfig({
     },
   ],
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
+    url: process.env.DATABASE_URI || 'mongodb://127.0.0.1/payload-plugin-navigation',
   }),
   editor: lexicalEditor(),
   email: testEmailAdapter,
