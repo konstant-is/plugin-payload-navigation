@@ -1,9 +1,10 @@
 import type { Field, FieldHook } from 'payload'
-import type { PluginContext } from 'src/utils/createPluginContext.js'
 
 import type { CreatePluginField, UrlFieldConfig } from '../types.js'
+import type { PluginContext } from '../utils/createPluginContext.js'
 
 import { generateUrl } from '../utils/generateUrl.js'
+import { getPluginPath } from '../utils/getPluginPath.js'
 
 const validateUrlField =
   (context: PluginContext): FieldHook =>
@@ -21,6 +22,9 @@ export const createUrlField: CreatePluginField<UrlFieldConfig, Field> = ({
     name: fieldConfig.fieldName,
     type: 'text',
     admin: {
+      components: {
+        Cell: getPluginPath('client', '#UrlCell'),
+      },
       description: 'Automatically generated url',
       position: 'sidebar',
       readOnly: true,

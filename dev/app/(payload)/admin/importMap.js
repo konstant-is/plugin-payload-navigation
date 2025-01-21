@@ -1,7 +1,9 @@
-import { PermalinkField as PermalinkField_6d6ea3ef4a7898bbdc97dc599538224a } from 'payload-plugin-navigation/client'
-import { SlugFieldClient as SlugFieldClient_6d6ea3ef4a7898bbdc97dc599538224a } from 'payload-plugin-navigation/client'
+import { PermalinkField as PermalinkField_72d2043f1e07f3269d10576da9298460 } from '@konstant/payload-plugin-navigation/client'
+import { SlugFieldClient as SlugFieldClient_72d2043f1e07f3269d10576da9298460 } from '@konstant/payload-plugin-navigation/client'
+import { UrlCell as UrlCell_72d2043f1e07f3269d10576da9298460 } from '@konstant/payload-plugin-navigation/client'
 
 export const importMap = {
-  "payload-plugin-navigation/client#PermalinkField": PermalinkField_6d6ea3ef4a7898bbdc97dc599538224a,
-  "payload-plugin-navigation/client#SlugFieldClient": SlugFieldClient_6d6ea3ef4a7898bbdc97dc599538224a
+  "@konstant/payload-plugin-navigation/client#PermalinkField": PermalinkField_72d2043f1e07f3269d10576da9298460,
+  "@konstant/payload-plugin-navigation/client#SlugFieldClient": SlugFieldClient_72d2043f1e07f3269d10576da9298460,
+  "@konstant/payload-plugin-navigation/client#UrlCell": UrlCell_72d2043f1e07f3269d10576da9298460
 }

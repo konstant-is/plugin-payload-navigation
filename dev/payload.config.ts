@@ -29,6 +29,7 @@ export default buildConfig({
     {
       slug: 'pages',
       admin: {
+        defaultColumns: ['title', 'url'],
         useAsTitle: 'title',
       },
       fields: [

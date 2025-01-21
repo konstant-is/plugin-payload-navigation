@@ -10,7 +10,7 @@ type Props = {
 } & ServerComponentProps &
   UIFieldClientProps
 
-export const PermalinkField = (props: Props) => {
+export const PermalinkField: React.FC<Props> = (props) => {
   const serverURL = getServerSideURL()
   return (
     <PermalinkFieldClient
