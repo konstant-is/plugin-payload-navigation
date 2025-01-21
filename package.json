@@ -19,10 +19,7 @@
     "prepublishOnly": "pnpm clean && pnpm build",
     "test": "jest",
     "ci:version": "node scripts/ci-version.js",
-    "ci:tag": "node scripts/tag.js",
-    "ci:tag-patch": "pnpm ci:version-patch && pnpm ci:tag",
-    "ci:tag-minor": "pnpm ci:version-minor && pnpm ci:tag",
-    "ci:tag-major": "pnpm ci:version-major && pnpm ci:tag"
+    "ci:release": "node scripts/tag.js"
   },
   "exports": {
     ".": {
