@@ -1,22 +1,30 @@
+'use client'
 import type { DefaultCellComponentProps } from 'payload'
 
-import Link from 'next/link'
-
-export const UrlCell: React.FC<DefaultCellComponentProps> = ({ rowData }) => {
-  const breadcrumbs: {
-    id: string
-    label: string
-    url: string
-  }[] = (rowData.breadcrumbs || []).filter((item: any) => Boolean(item.id)).reverse()
+type Breadcrumb = {
+  doc: string
+  id: string
+  label?: string
+}
+export const UrlCell: React.FC<DefaultCellComponentProps> = (props) => {
+  const { collectionSlug, rowData } = props
+  const breadcrumbs = ((rowData.breadcrumbs as Partial<Breadcrumb>[]) || [])
+    .filter((c) => Boolean(c.id && c.doc))
+    .map((c) => c as Breadcrumb)
+    .reverse()
 
   return (
     <div>
-      {breadcrumbs.map((b, index) => (
-        <span key={b.id}>
-          <Link href={`/admin/collections/${b.id}`}>{b.label}</Link>
-          {index < breadcrumbs.length - 1 && <span> / </span>}
-        </span>
-      ))}
+      {breadcrumbs.map((b, index) => {
+        const href = `/admin/collections/${collectionSlug}/${b.doc}`
+
+        return (
+          <span key={index}>
+            <a href={href}>{b.label || '<No Label>'}</a>
+            {index < breadcrumbs.length - 1 && <span> / </span>}
+          </span>
+        )
+      })}
     </div>
   )
 }
