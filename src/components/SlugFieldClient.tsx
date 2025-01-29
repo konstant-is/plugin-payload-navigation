@@ -52,10 +52,12 @@ export const SlugFieldClient: React.FC<Props> = ({
   )
 
   React.useEffect(() => {
-    if (processedValue !== value) {
-      setValue(processedValue)
+    if (checkboxValue) {
+      if (processedValue !== value) {
+        setValue(processedValue)
+      }
     }
-  }, [setValue, processedValue, value])
+  }, [setValue, checkboxValue, processedValue, value])
 
   const handleLock = useCallback(
     (e: React.MouseEvent) => {
