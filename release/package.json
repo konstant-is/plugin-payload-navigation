@@ -27,14 +27,11 @@
     "dist"
   ],
   "devDependencies": {
-    "@payloadcms/eslint-config": "3.9.0",
-    "@payloadcms/plugin-nested-docs": "3.18.0",
-    "payload": "3.18.0",
     "slugify": "^1.6.6"
   },
   "peerDependencies": {
-    "payload": "^3.18.0",
-    "@payloadcms/plugin-nested-docs": "^3.18.0"
+    "payload": "^3.21.0",
+    "@payloadcms/plugin-nested-docs": "^3.21.0"
   },
   "scripts": {
     "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
