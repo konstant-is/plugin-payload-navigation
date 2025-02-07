@@ -1,6 +1,6 @@
 {
   "name": "@konstant/payload-plugin-navigation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Navigation plugin for Payload",
   "license": "MIT",
   "type": "module",
@@ -19,7 +19,8 @@
     "prepublishOnly": "pnpm clean && pnpm build",
     "test": "jest",
     "ci:version": "node scripts/ci-version.js",
-    "ci:release": "node scripts/tag.js"
+    "ci:release": "node scripts/tag.js",
+    "ci:patch": "pnpm ci:version patch && pnpm ci:tag"
   },
   "exports": {
     ".": {
