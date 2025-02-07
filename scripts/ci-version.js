@@ -14,11 +14,11 @@ const incrementVersion = (currentVersion, releaseType) => {
 
 const updateVersion = (releaseType) => {
   const packageJsonPath = path.resolve(__dirname, '../package.json')
-  const releasePackageJsonPath = path.resolve(__dirname, '../release/package.json')
+  const publishPackageJsonPath = path.resolve(__dirname, '../publish/package.json')
 
   try {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
-    const releasePackageJson = JSON.parse(fs.readFileSync(releasePackageJsonPath, 'utf8'))
+    const publishPackageJson = JSON.parse(fs.readFileSync(publishPackageJsonPath, 'utf8'))
 
     const newVersion = incrementVersion(packageJson.version, releaseType)
 
@@ -27,18 +27,18 @@ const updateVersion = (releaseType) => {
     }
 
     packageJson.version = newVersion
-    releasePackageJson.version = newVersion
+    publishPackageJson.version = newVersion
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n', 'utf8')
     fs.writeFileSync(
-      releasePackageJsonPath,
-      JSON.stringify(releasePackageJson, null, 2) + '\n',
+      publishPackageJsonPath,
+      JSON.stringify(publishPackageJson, null, 2) + '\n',
       'utf8',
     )
 
     // Commit the changes to Git
     execSync(`git add ${packageJsonPath}`)
-    execSync(`git add ${releasePackageJsonPath}`)
+    execSync(`git add ${publishPackageJsonPath}`)
     execSync(`git commit -m "chore(version): bump version to ${newVersion}"`)
     execSync(`git push origin main`)
 

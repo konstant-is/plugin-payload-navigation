@@ -8,7 +8,7 @@ on:
 env:
   NODE_VERSION: 22.6.0
   PNPM_VERSION: 9.7.1
-  KEEP: '.git .github dist release'
+  KEEP: '.git .github dist publish'
 
 jobs:
   create-release:
@@ -48,9 +48,9 @@ jobs:
 
       - name: Prepare Release Files
         run: |
-          # Copy release files back to the root and clean release folder
-          cp -R release/* .
-          rm -rf release
+          # Copy publish files back to the root and clean release folder
+          cp -R publish/* .
+          rm -rf publish
 
           git add .
           git commit -m "chore(release): prepare release for v${{ github.ref_name }}"
