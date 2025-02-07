@@ -29,7 +29,7 @@ export default buildConfig({
     {
       slug: 'pages',
       admin: {
-        defaultColumns: ['title', 'url'],
+        defaultColumns: ['title', 'slug', 'url'],
         useAsTitle: 'title',
       },
       fields: [
@@ -65,6 +65,9 @@ export default buildConfig({
   plugins: [
     navigationPlugin({
       collections: ['pages'],
+      fields: {
+        slug: { autoIncrementSlug: true },
+      },
       nestedDocsPlugin: {
         generateLabel: (_, doc) => doc.title as string,
         generateURL: (docs) => {

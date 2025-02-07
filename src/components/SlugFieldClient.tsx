@@ -13,6 +13,7 @@ import css from './SlugField.module.css'
 
 type Props = {
   custom: {
+    autoIncrementSlug: boolean
     checkboxFieldPath: string
     slugifyOptions: { remove: string } & Omit<SlugifyOptions, 'remove'>
     watchFields: string[]
@@ -26,7 +27,12 @@ export const SlugFieldClient: React.FC<Props> = ({
   readOnly: readOnlyFromProps,
 }) => {
   const { label } = field
-  const { checkboxFieldPath: checkboxFieldPathFromProps, slugifyOptions, watchFields } = custom
+  const {
+    autoIncrementSlug,
+    checkboxFieldPath: checkboxFieldPathFromProps,
+    slugifyOptions,
+    watchFields,
+  } = custom
 
   const checkboxFieldPath = path?.includes('.')
     ? `${path}.${checkboxFieldPathFromProps}`
@@ -46,10 +52,15 @@ export const SlugFieldClient: React.FC<Props> = ({
     return watchFields.map((watch) => fields[watch])
   })
 
-  const processedValue = useMemo(
-    () => generateSlug(fields, slugifyOptions),
-    [fields, slugifyOptions],
-  )
+  const processedValue = useMemo(() => {
+    const slug = generateSlug(fields, slugifyOptions)
+
+    if (value !== slug && autoIncrementSlug) {
+      return value
+    }
+
+    return slug
+  }, [fields, slugifyOptions, value, autoIncrementSlug])
 
   React.useEffect(() => {
     if (checkboxValue) {

@@ -55,6 +55,7 @@ export type LocalizedUrlFieldConfig = BaseFieldConfig
 
 // Configuration for regular slug fields
 export type SlugFieldConfig = {
+  autoIncrementSlug?: boolean
   lockFieldName: string // Field to store the lock status
   useFields: string[] // Fields to generate the slug from
 } & BaseFieldConfig
