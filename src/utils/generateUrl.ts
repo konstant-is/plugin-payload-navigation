@@ -31,7 +31,6 @@ export const generateLocalizedUrl = ({
   const { defaultLocale = context.fallbackLocale } = payload.config.localization || {}
 
   const url = generateUrl(context, data)
-
   switch (context.appendLocaleToUrl) {
     case 'all':
       return `/${locale}${url}`

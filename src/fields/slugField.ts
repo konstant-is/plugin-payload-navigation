@@ -42,39 +42,40 @@ export const validateSlug =
 
 const uniqueSlug =
   (pluginContext: PluginContext): FieldHook =>
-  async ({ collection, req, value }) => {
+  async ({ collection, data, req, value }) => {
     const { slugFieldConfig } = pluginContext.fieldConfigs
 
-    const currentDocId = req.routeParams?.id
+    // Try to get the ID of the current document
+    const currentDocId = req.routeParams?.id || data?.id // From URL params (usually for update) // From the data being passed (useful for beforeChange hooks)
+
     let slug = value
     let suffix = 1
 
+    // Skip if autoIncrementSlug is disabled or there's no collection or slug is empty
     if (slugFieldConfig.autoIncrementSlug == false || !collection?.slug || !slug) {
-      // Skip if autoIncrementSlug is disabled
-      // Skip if there's no collection or slug is empty
       return value
     }
 
     while (true) {
-      const existingDocs = await req.payload.find({
-        collection: collection.slug,
-        where: {
-          slug: { equals: slug },
-        },
-      })
-
-      // Exclude the current document if updating
-      const conflictingDocs = existingDocs.docs.filter((doc) => doc.id !== currentDocId)
+      const conflictingDocs = await req.payload
+        .find({
+          collection: collection.slug,
+          where: {
+            slug: { equals: slug },
+          },
+        })
+        .then((result) => result.docs.filter((doc) => doc.id !== currentDocId))
 
       if (conflictingDocs.length === 0) {
         return slug // If unique, return the slug
       }
 
-      // Append suffix and increment
+      // Append suffix and increment if conflicts exist
       slug = `${value}-${suffix}`
       suffix++
     }
   }
+
 export const createSlugField: CreatePluginField<SlugFieldConfig, Field[]> = ({
   context,
   fieldConfig,
@@ -112,7 +113,8 @@ export const createSlugField: CreatePluginField<SlugFieldConfig, Field[]> = ({
       position: 'sidebar',
     },
     hooks: {
-      beforeValidate: [validateSlug(context), uniqueSlug(context)],
+      beforeChange: [uniqueSlug(context)],
+      beforeValidate: [validateSlug(context)],
     },
     index: true,
     localized: true,
