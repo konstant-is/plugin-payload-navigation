@@ -18,9 +18,16 @@
     "lint:fix": "eslint ./src --fix",
     "prepublishOnly": "pnpm clean && pnpm build",
     "test": "jest",
-    "ci:version": "node scripts/ci-version.js",
-    "ci:tag": "node scripts/tag.js",
-    "ci:patch": "pnpm ci:version patch && pnpm ci:tag"
+    "ci:tag": "node tools/scripts/tag-release.js",
+    "ci:pre-publish": "pnpm ci:sync:publish-pkg && pnpm ci:tag",
+    "ci:sync:publish-pkg": "node tools/scripts/sync-publish-package.js",
+    "ci:version": "node tools/scripts/version.js",
+    "ci:version:patch": "pnpm ci:version patch",
+    "ci:version:minor": "pnpm ci:version minor",
+    "ci:version:major": "pnpm ci:version major",
+    "ci:release:patch": "pnpm ci:version:patch && pnpm ci:pre-publish",
+    "ci:release:minor": "pnpm ci:version:minor && pnpm ci:pre-publish",
+    "ci:release:major": "pnpm ci:version:major && pnpm ci:pre-publish"
   },
   "exports": {
     ".": {
@@ -41,19 +48,17 @@
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "dependencies": {
     "@payloadcms/plugin-nested-docs": "3.32.0",
     "slugify": "^1.6.6"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@eslint/eslintrc": "^3.3.1",
     "@payloadcms/db-mongodb": "3.32.0",
     "@payloadcms/db-postgres": "3.32.0",
     "@payloadcms/db-sqlite": "3.32.0",
-    "@payloadcms/eslint-config": "3.28.0",
     "@payloadcms/next": "3.32.0",
     "@payloadcms/richtext-lexical": "3.32.0",
     "@payloadcms/ui": "3.32.0",
@@ -65,7 +70,6 @@
     "child_process": "^1.0.2",
     "copyfiles": "2.4.1",
     "cross-env": "^7.0.3",
-    "eslint": "^9.23.0",
     "eslint-config-next": "15.2.4",
     "fs": "0.0.1-security",
     "graphql": "^16.8.1",
@@ -74,7 +78,6 @@
     "next": "15.2.4",
     "open": "^10.1.0",
     "payload": "3.32.0",
-    "prettier": "^3.5.3",
     "qs-esm": "7.0.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -82,10 +85,14 @@
     "semver": "^7.7.1",
     "sharp": "0.33.5",
     "sort-package-json": "^3.0.0",
-    "typescript": "^5.8.2",
+    "typescript": "^5",
     "url": "^0.11.4"
   },
   "engines": {
-    "node": "^18.20.2 || >=20.9.0"
+    "node": "^18.20.2 || >=20.9.0",
+    "pnpm": "^10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["@biomejs/biome", "sharp"]
   }
 }
