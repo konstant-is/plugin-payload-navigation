@@ -45,9 +45,7 @@
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "dependencies": {
     "@payloadcms/plugin-nested-docs": "3.32.0",
     "slugify": "^1.6.6"
@@ -92,9 +90,6 @@
     "pnpm": "^10"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "sharp"
-    ]
+    "onlyBuiltDependencies": ["@biomejs/biome", "sharp"]
   }
 }
