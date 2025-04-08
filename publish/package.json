@@ -1,6 +1,6 @@
 {
   "name": "@konstant/payload-plugin-navigation",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "Navigation plugin for Payload",
   "license": "MIT",
   "type": "module",
@@ -23,7 +23,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
     "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
